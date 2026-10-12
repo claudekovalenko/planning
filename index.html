@@ -45,8 +45,6 @@
   .intro { margin-top: 0.75rem; color: var(--muted); font-size: 0.92rem; max-width: 40rem; }
   .direction { border-left: 2px solid var(--gold); padding: 0.15rem 0 0.15rem 0.9rem; margin-top: 1rem; max-width: 46rem; }
   .direction .text { font-style: italic; font-size: 1.05rem; margin-top: 0.2rem; }
-  .born { margin-top: 0.75rem; font-family: var(--sans); font-size: 0.8rem; color: var(--muted); display: flex; align-items: center; gap: 0.5rem; }
-  .born input { width: 5.5rem; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 0.25rem 0.5rem; font-size: 16px; }
   .age { font-family: var(--sans); font-size: 0.75em; color: var(--muted); font-weight: normal; white-space: nowrap; }
   .hd.goal .age, .cell.end .yr .age { color: var(--gold); opacity: 0.8; }
   .draft { margin-top: 1rem; font-family: var(--sans); font-size: 0.8rem; color: var(--muted); }
@@ -424,7 +422,7 @@
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
   }
   state.goals = state.goals || [];
-  if (!state.born) { state.born = 1995; save(); }
+  state.born = 1995;   // fixed: born in 1995
   state.view = 'five';   // always open on the five-year plan
   function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
 
@@ -461,8 +459,6 @@
     h += state.view === 'long' || state.view === 'timeline'
       ? '<div class="direction"><span class="label">Where it is all heading</span>' + ed('longDirection', state.longDirection, 'Over my lifetime, I sense God leading me toward\u2026', 'text') + '</div>'
       : '<div class="direction"><span class="label">The direction</span>' + ed('direction', state.direction, 'Where I sense God leading over these five years', 'text') + '</div>';
-    h += '<label class="born">Born in <input type="number" inputmode="numeric" id="born" min="1930" max="2026" placeholder="year" value="' + (state.born || '') + '">' +
-      (state.born ? '<span>' + age(new Date().getFullYear()) + ' this year</span>' : '<span>to see your age beside each year</span>') + '</label>';
     h += ({ long: longView, timeline: timelineView, five: fiveYears, year: thisYear }[state.view] || fiveYears)();
     if (state.isDraft) h += '<p class="draft">A starting draft from your Vision. Tap any text to rewrite it. <button data-act="blank">Start blank</button></p>';
     h += '<div class="foot">“The heart of man plans his way, but the LORD establishes his steps.”<span>PROVERBS 16:9</span></div>';
@@ -674,10 +670,6 @@
   document.addEventListener('change', function (e) {
     if (e.target.dataset.m) { msItem(e.target)[e.target.dataset.m] = e.target.value; changed(); render(); return; }
     if (e.target.dataset.nowArea) { nowItem(e.target).area = e.target.value; changed(); render(); return; }
-    if (e.target.id !== 'born') return;
-    var v = parseInt(e.target.value, 10);
-    state.born = v >= 1930 && v <= 2026 ? v : null;
-    changed(); render();
   });
   document.addEventListener('input', function (e) {
     if (e.target.dataset.path) { setPath(e.target.dataset.path, e.target.textContent.trim()); changed(); }
