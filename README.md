@@ -12,7 +12,9 @@ Four views. It opens on the five-year plan:
   milestones with how far away they are and my age. The line zooms to 10, 20
   or 50 years and shows the big ones by default, or every milestone. Below it,
   what is happening now. Milestones are edited behind "Edit milestones": the
-  star marks a big one, and two stars one of the biggest.
+  star marks a big one, and two stars one of the biggest. The marriage card
+  carries a "Ready for marriage" checklist: strength gain, the car, sufficient
+  income, free from lust, clear on my call, clear on my church home.
 - **50 years:** where it is all heading, then each area by 2031, 2036, 2046,
   2066 and 2076, with ages.
 - **2027:** the dated goals for this year, grouped by area under that area's
