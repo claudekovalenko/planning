@@ -36,6 +36,9 @@
   [contenteditable]:focus { background: var(--gold-soft); box-shadow: 0 0 0 3px var(--gold-soft); }
   [contenteditable]:empty::before { content: attr(data-ph); color: var(--muted); font-style: italic; opacity: 0.7; }
 
+  nav.parts { display: flex; gap: 1.5rem; border-bottom: 1px solid var(--line); margin-bottom: 1.25rem; }
+  nav.parts button { background: none; border: none; padding: 0.2rem 0 0.65rem; font-family: var(--sans); font-size: 0.8rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; }
+  nav.parts button.on { color: var(--gold); border-bottom-color: var(--gold); }
   header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
   h1 { font-weight: normal; font-size: 1.6rem; }
   .switch { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
@@ -461,7 +464,9 @@
   }
   state.goals = state.goals || [];
   state.born = 1995;   // fixed: born in 1995
-  state.view = 'five';   // always open on the five-year plan
+  // Two parts: the plan (5 years / 50 years / 2027) and the timeline, which has its own address.
+  state.view = location.hash === '#timeline' ? 'timeline' : 'five';
+  var planView = 'five';
   function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
 
   var openId = null;   // goal whose editor is open
@@ -490,10 +495,13 @@
       five: 'Five years \u00b7 ' + START + '\u2013' + YEARS[4] + (state.born ? ' <span class="age">\u00b7 ages ' + age(START) + '\u2013' + age(YEARS[4]) + '</span>' : ''),
       year: START + ageTag(START, '\u00b7 turning ')
     };
-    var h = '<header><h1>' + titles[state.view] + '</h1><div class="switch">' +
-      [['five', '5 years'], ['timeline', 'Timeline'], ['long', '50 years'], ['year', String(START)]].map(function (v) {
+    var isTl = state.view === 'timeline';
+    var h = '<nav class="parts"><button data-part="plan" class="' + (isTl ? '' : 'on') + '">Plan</button>' +
+      '<button data-part="timeline" class="' + (isTl ? 'on' : '') + '">Timeline</button></nav>';
+    h += '<header><h1>' + titles[state.view] + '</h1>' + (isTl ? '' : '<div class="switch">' +
+      [['five', '5 years'], ['long', '50 years'], ['year', String(START)]].map(function (v) {
         return '<button data-view="' + v[0] + '" class="' + (state.view === v[0] ? 'on' : '') + '">' + v[1] + '</button>';
-      }).join('') + '</div></header>';
+      }).join('') + '</div>') + '</header>';
     h += state.view === 'long' || state.view === 'timeline'
       ? '<div class="direction"><span class="label">Where it is all heading</span>' + ed('longDirection', state.longDirection, 'Over my lifetime, I sense God leading me toward\u2026', 'text') + '</div>'
       : '<div class="direction"><span class="label">The direction</span>' + ed('direction', state.direction, 'Where I sense God leading over these five years', 'text') + '</div>';
@@ -746,7 +754,14 @@
     var z = e.target.closest('[data-zoom]');
     if (z) { state.zoom = +z.dataset.zoom; save(); render(); return; }
     var v = e.target.closest('[data-view]');
-    if (v) { state.view = v.dataset.view; openId = null; save(); render(); return; }
+    if (v) { state.view = planView = v.dataset.view; openId = null; save(); render(); return; }
+    var part = e.target.closest('[data-part]');
+    if (part) {
+      var tl = part.dataset.part === 'timeline';
+      state.view = tl ? 'timeline' : planView; openId = null;
+      history.replaceState(null, '', tl ? '#timeline' : location.pathname + location.search);
+      render(); window.scrollTo(0, 0); return;
+    }
     var el = e.target.closest('[data-act]'); if (!el) return;
     var row = el.closest('.row'), g = row && state.goals.find(function (x) { return x.id === row.dataset.id; });
 
@@ -826,6 +841,10 @@
   window.addEventListener('resize', function () {
     if (state.view !== 'timeline') return;
     clearTimeout(resizeT); resizeT = setTimeout(render, 150);
+  });
+
+  window.addEventListener('hashchange', function () {
+    state.view = location.hash === '#timeline' ? 'timeline' : planView; render();
   });
 
   render();

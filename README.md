@@ -1,6 +1,8 @@
 # Five-Year Plan
 
-Four views. It opens on the five-year plan:
+Two parts, switched at the top: **Plan** (5 years, 50 years, 2027) and
+**Timeline**, which has its own address (`#timeline`). It opens on the
+five-year plan:
 
 - **5 years:** the direction for the five years, then a few areas of life — Church home
   first, then Teaching & digital ministry, then Disciple-making growing out of it, then Walk with God, Marriage & family,
