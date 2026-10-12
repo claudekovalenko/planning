@@ -347,6 +347,7 @@
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
   }
   state.goals = state.goals || [];
+  if (!state.born) { state.born = 1995; save(); }
   state.view = 'five';   // always open on the five-year plan
   function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
 
