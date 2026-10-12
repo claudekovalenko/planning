@@ -136,7 +136,22 @@
 
   /* Starting draft, drawn from the Vision app. 2028-2030 are left open on
      purpose; those are for you to fill. */
-  var DIRECTION = 'Growing in preaching, and from there into disciple-making: messages that hand people a next step, and a pathway that carries them from reached to sent.';
+  var OLD_DIRECTIONS = ['Growing in preaching, and from there into disciple-making: messages that hand people a next step, and a pathway that carries them from reached to sent.'];
+  var DIRECTION = 'Rooted in a church I grow deeply with; from there, growing in preaching, and from preaching into disciple-making.';
+  var CHURCH = { id: 'church', name: 'Church home', years: {
+    2027: 'Found the right church, committed to it, and started serving',
+    2028: 'Known there: in a group, with people who know me well',
+    2029: 'Grown deeply with this church; trusted with more',
+    2030: 'Helping build its culture of discipleship',
+    2031: 'Deeply rooted in a church family I\u2019ve grown with for years' } };
+  function churchGoals() {
+    return [
+      { title: 'Visit and pray through the churches I\u2019m considering', start: '2027-01-01', due: '2027-02-28' },
+      { title: 'Decide on my church, and walk it through Centered', start: '2027-03-01', due: '2027-03-31' },
+      { title: 'Join a group and a place to serve', start: '2027-04-01', due: '2027-05-31' },
+      { title: 'Meet with a pastor there; share where I sense God leading', start: '2027-04-01', due: '2027-06-30' }
+    ].map(function (g) { return { id: uid(), area: 'church', title: g.title, start: g.start, due: g.due, done: false }; });
+  }
   var PREACHING = { id: 'preaching', name: 'Preaching', years: {
     2027: 'Preaching regularly: 12 messages, honest feedback on each, every one ending in a next step',
     2028: 'A trusted voice in my church; a teaching series that moves people into discipleship',
@@ -150,7 +165,6 @@
     2031: 'Disciples on campus who make disciples, with leaders sent out to the ends of the earth' };
   function preachingGoals() {
     return [
-      { title: 'Be planted in a church where I can preach', start: '2027-01-01', due: '2027-02-28' },
       { title: 'Write and preach a 10-minute message; get a mentor’s critique', start: '2027-01-04', due: '2027-02-15' },
       { title: 'Preach or teach 6 times, with honest feedback on each', start: '2027-02-16', due: '2027-06-30' },
       { title: 'Preach or teach 6 more, each ending in a step into discipleship', start: '2027-07-01', due: '2027-12-15' }
@@ -162,8 +176,9 @@
   function draft() {
     function g(area, title, start, due) { return { id: uid(), area: area, title: title, start: start, due: due, done: false }; }
     return {
-      v: 2, isDraft: true, view: 'five', direction: DIRECTION,
+      v: 3, isDraft: true, view: 'five', direction: DIRECTION,
       areas: [
+        JSON.parse(JSON.stringify(CHURCH)),
         JSON.parse(JSON.stringify(PREACHING)),
         { id: 'ministry', name: 'Disciple-making', years: JSON.parse(JSON.stringify(DISCIPLES)) },
         { id: 'god', name: 'Walk with God', years: {
@@ -179,7 +194,7 @@
           2027: 'One income experiment tested; support raising decided',
           2031: 'Provision that frees my time for disciple-making' } }
       ],
-      goals: preachingGoals().concat([
+      goals: churchGoals().concat(preachingGoals(), [
         g('ministry', 'Write my disciple-making pathway', '2027-01-04', '2027-03-31'),
         g('ministry', 'Walk 2 men through stage one', '2027-04-01', '2027-06-30'),
         g('ministry', 'Launch a discipleship cycle on campus', '2027-08-01', '2027-09-15'),
@@ -195,9 +210,9 @@
 
   var state;
   try { state = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
-  if (!state || !Array.isArray(state.areas) || (state.isDraft && state.v !== 2)) state = draft();
+  if (!state || !Array.isArray(state.areas) || (state.isDraft && state.v !== 3)) state = draft();
   // A plan already edited under v1: add preaching ahead of disciple-making, keep everything written.
-  if (state.v !== 2) {
+  if (state.v === 1) {
     var mi = state.areas.findIndex(function (a) { return a.id === 'ministry'; });
     if (!state.areas.some(function (a) { return a.id === 'preaching'; })) {
       state.areas.splice(Math.max(0, mi), 0, JSON.parse(JSON.stringify(PREACHING)));
@@ -211,8 +226,20 @@
       if (m.name === 'Ministry') m.name = 'Disciple-making';
       Object.keys(DISCIPLES).forEach(function (y) { if (!m.years[y]) m.years[y] = DISCIPLES[y]; });
     }
-    if (!state.direction) state.direction = DIRECTION;
     state.v = 2;
+  }
+  // v2 -> v3: the church comes first; everything written is kept.
+  if (state.v === 2) {
+    if (!state.areas.some(function (a) { return a.id === 'church'; })) {
+      state.areas.unshift(JSON.parse(JSON.stringify(CHURCH)));
+      var moved = false;
+      (state.goals || []).forEach(function (g) {
+        if (/planted|church/i.test(g.title) && g.area !== 'church') { g.area = 'church'; moved = true; }
+      });
+      state.goals = churchGoals().filter(function (g, i) { return !(moved && i === 1); }).concat(state.goals || []);
+    }
+    if (!state.direction || OLD_DIRECTIONS.indexOf(state.direction) > -1) state.direction = DIRECTION;
+    state.v = 3;
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
   }
   state.goals = state.goals || [];
@@ -366,7 +393,7 @@
       }
       case 'blank':
         if (!confirm('Clear the draft and start blank?')) return;
-        state = { v: 2, isDraft: false, view: state.view, direction: '', areas: [{ id: uid(), name: '', years: {} }], goals: [] };
+        state = { v: 3, isDraft: false, view: state.view, direction: '', areas: [{ id: uid(), name: '', years: {} }], goals: [] };
         break;
       default: return;
     }
