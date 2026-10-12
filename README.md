@@ -2,8 +2,9 @@
 
 Two views:
 
-- **5 years:** a few areas of life (Walk with God, Ministry, Marriage & family,
-  Health, Provision). For each area: where I want to be by 2031, and a milestone
+- **5 years:** the direction for the five years, then a few areas of life — Preaching
+  first, Disciple-making growing out of it, then Walk with God, Marriage & family,
+  Health, Provision. For each area: where I want to be by 2031, and a milestone
   for the end of each year from 2027 to 2030. Tap any cell to write in it.
 - **2027:** the dated goals for this year, grouped by area under that area's
   2027 milestone. Each goal is a bar across Jan–Dec from its start date to its

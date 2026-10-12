@@ -43,6 +43,8 @@
   .switch button + button { border-left: 1px solid var(--line); }
   .switch button.on { background: var(--gold); color: #1a1408; font-weight: 600; }
   .intro { margin-top: 0.75rem; color: var(--muted); font-size: 0.92rem; max-width: 40rem; }
+  .direction { border-left: 2px solid var(--gold); padding: 0.15rem 0 0.15rem 0.9rem; margin-top: 1rem; max-width: 46rem; }
+  .direction .text { font-style: italic; font-size: 1.05rem; margin-top: 0.2rem; }
   .draft { margin-top: 1rem; font-family: var(--sans); font-size: 0.8rem; color: var(--muted); }
   .draft button { background: none; border: none; color: var(--gold); text-decoration: underline; text-underline-offset: 3px; font-size: 0.8rem; }
 
@@ -134,17 +136,39 @@
 
   /* Starting draft, drawn from the Vision app. 2028-2030 are left open on
      purpose; those are for you to fill. */
+  var DIRECTION = 'Growing in preaching, and from there into disciple-making: messages that hand people a next step, and a pathway that carries them from reached to sent.';
+  var PREACHING = { id: 'preaching', name: 'Preaching', years: {
+    2027: 'Preaching regularly: 12 messages, honest feedback on each, every one ending in a next step',
+    2028: 'A trusted voice in my church; a teaching series that moves people into discipleship',
+    2029: 'Preaching that feeds the pathway: people step from the message into a group',
+    2030: 'Training others to open and teach the Word',
+    2031: 'Opening the Word with clarity and power, every message leading people into real discipleship' } };
+  var DISCIPLES = { 2027: 'Pathway written on one page; 2 men walking through stage one',
+    2028: 'A discipleship cycle running on campus; the first leaders emerging',
+    2029: 'Disciples making disciples: leaders I raised up discipling others',
+    2030: 'Several groups led by people I raised up',
+    2031: 'Disciples on campus who make disciples, with leaders sent out to the ends of the earth' };
+  function preachingGoals() {
+    return [
+      { title: 'Be planted in a church where I can preach', start: '2027-01-01', due: '2027-02-28' },
+      { title: 'Write and preach a 10-minute message; get a mentor’s critique', start: '2027-01-04', due: '2027-02-15' },
+      { title: 'Preach or teach 6 times, with honest feedback on each', start: '2027-02-16', due: '2027-06-30' },
+      { title: 'Preach or teach 6 more, each ending in a step into discipleship', start: '2027-07-01', due: '2027-12-15' }
+    ].map(function (g) { return { id: uid(), area: 'preaching', title: g.title, start: g.start, due: g.due, done: false }; });
+  }
+
+  /* Starting draft, drawn from the Vision app. The order is the direction:
+     preaching first, and disciple-making growing out of it. */
   function draft() {
     function g(area, title, start, due) { return { id: uid(), area: area, title: title, start: start, due: due, done: false }; }
     return {
-      v: 1, isDraft: true, view: 'five',
+      v: 2, isDraft: true, view: 'five', direction: DIRECTION,
       areas: [
+        JSON.parse(JSON.stringify(PREACHING)),
+        { id: 'ministry', name: 'Disciple-making', years: JSON.parse(JSON.stringify(DISCIPLES)) },
         { id: 'god', name: 'Walk with God', years: {
           2027: 'Read through the whole Bible; a daily rhythm of prayer',
           2031: 'Deeply saturated in the Word, praying daily, obeying what I read' } },
-        { id: 'ministry', name: 'Ministry', years: {
-          2027: 'Planted in a church; pathway written and tested with 2 men',
-          2031: 'Disciples on campus who make disciples, with leaders sent out' } },
         { id: 'marriage', name: 'Marriage & family', years: {
           2027: 'Clear marriage-prep steps, a married mentor, solid friendships',
           2031: 'Married, leading a home with a strong, good culture' } },
@@ -155,24 +179,42 @@
           2027: 'One income experiment tested; support raising decided',
           2031: 'Provision that frees my time for disciple-making' } }
       ],
-      goals: [
-        g('god', 'Read through the Bible', '2027-01-01', '2027-12-31'),
-        g('ministry', 'Decide which church I’m planted in', '2027-01-01', '2027-02-28'),
+      goals: preachingGoals().concat([
         g('ministry', 'Write my disciple-making pathway', '2027-01-04', '2027-03-31'),
         g('ministry', 'Walk 2 men through stage one', '2027-04-01', '2027-06-30'),
         g('ministry', 'Launch a discipleship cycle on campus', '2027-08-01', '2027-09-15'),
+        g('god', 'Read through the Bible', '2027-01-01', '2027-12-31'),
         g('marriage', 'Ask a married mentor to walk with me', '2027-01-01', '2027-03-31'),
         g('marriage', 'Meet regularly with 2–3 men', '2027-02-01', '2027-12-31'),
         g('health', 'Train 3x a week and retest lifts', '2027-01-04', '2027-06-30'),
         g('provision', 'Test one AI income idea', '2027-02-01', '2027-05-31'),
         g('provision', 'Decide how support raising fits', '2027-03-01', '2027-04-30')
-      ]
+      ])
     };
   }
 
   var state;
   try { state = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
-  if (!state || !Array.isArray(state.areas)) state = draft();
+  if (!state || !Array.isArray(state.areas) || (state.isDraft && state.v !== 2)) state = draft();
+  // A plan already edited under v1: add preaching ahead of disciple-making, keep everything written.
+  if (state.v !== 2) {
+    var mi = state.areas.findIndex(function (a) { return a.id === 'ministry'; });
+    if (!state.areas.some(function (a) { return a.id === 'preaching'; })) {
+      state.areas.splice(Math.max(0, mi), 0, JSON.parse(JSON.stringify(PREACHING)));
+      state.goals = preachingGoals().concat(state.goals || []);
+      (state.goals || []).forEach(function (g) {
+        if (g.area === 'ministry' && /planted/i.test(g.title)) g.area = 'preaching';
+      });
+    }
+    var m = state.areas.find(function (a) { return a.id === 'ministry'; });
+    if (m) {
+      if (m.name === 'Ministry') m.name = 'Disciple-making';
+      Object.keys(DISCIPLES).forEach(function (y) { if (!m.years[y]) m.years[y] = DISCIPLES[y]; });
+    }
+    if (!state.direction) state.direction = DIRECTION;
+    state.v = 2;
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+  }
   state.goals = state.goals || [];
   function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
 
@@ -195,6 +237,7 @@
     var h = '<header><h1>' + (state.view === 'five' ? 'Five years · ' + START + '–' + YEARS[4] : START) + '</h1>' +
       '<div class="switch"><button data-view="five" class="' + (state.view === 'five' ? 'on' : '') + '">5 years</button>' +
       '<button data-view="year" class="' + (state.view === 'year' ? 'on' : '') + '">' + START + '</button></div></header>';
+    h += '<div class="direction"><span class="label">The direction</span>' + ed('direction', state.direction, 'Where I sense God leading over these five years', 'text') + '</div>';
     h += state.view === 'five' ? fiveYears() : thisYear();
     if (state.isDraft) h += '<p class="draft">A starting draft from your Vision. Tap any text to rewrite it. <button data-act="blank">Start blank</button></p>';
     h += '<div class="foot">“The heart of man plans his way, but the LORD establishes his steps.”<span>PROVERBS 16:9</span></div>';
@@ -323,7 +366,7 @@
       }
       case 'blank':
         if (!confirm('Clear the draft and start blank?')) return;
-        state = { v: 1, isDraft: false, view: state.view, areas: [{ id: uid(), name: '', years: {} }], goals: [] };
+        state = { v: 2, isDraft: false, view: state.view, direction: '', areas: [{ id: uid(), name: '', years: {} }], goals: [] };
         break;
       default: return;
     }
