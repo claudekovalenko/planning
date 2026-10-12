@@ -77,6 +77,52 @@
   .it .an select { background: none; border: none; padding: 0; font-size: 0.75rem; color: var(--muted); max-width: 100%; }
   .small { font-size: 0.86rem; }
   @media (max-width: 560px) { .it .body { grid-template-columns: 1fr; gap: 0; } }
+  .focus { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.6rem; margin-top: 1.25rem; }
+  .fcard { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 0.8rem 1rem; }
+  .fcard.first { border-color: var(--gold); background: linear-gradient(var(--gold-soft), var(--panel)); }
+  .fcard .ft { font-size: 1.25rem; margin-top: 0.2rem; }
+  .fcard.first .ft { color: var(--gold); font-size: 1.45rem; }
+  .fcard .fw { font-family: var(--sans); font-size: 0.78rem; color: var(--muted); margin-top: 0.2rem; }
+  .zoom { display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap; margin-top: 1.5rem; }
+  .zoom button { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 0.3rem 0.7rem; font-family: var(--sans); font-size: 0.78rem; color: var(--muted); }
+  .zoom button.on { color: var(--gold); border-color: var(--gold); }
+  .lin-wrap { overflow-x: auto; margin-top: 0.6rem; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); -webkit-overflow-scrolling: touch; }
+  .lin { position: relative; }
+  .lin .axis { position: absolute; left: 0; right: 0; height: 2px; background: var(--gold); opacity: 0.5; }
+  .lin .tick { position: absolute; width: 1px; height: 10px; background: var(--muted); }
+  .lin .yl { position: absolute; transform: translateX(-50%); font-family: var(--sans); font-size: 0.7rem; color: var(--muted); text-align: center; line-height: 1.2; }
+  .lin .yl i { display: block; font-style: normal; font-size: 0.62rem; opacity: 0.7; }
+  .lin .nowline { position: absolute; top: 0; width: 2px; background: var(--ink); opacity: 0.25; }
+  .lin .nowlab { position: absolute; bottom: 4px; transform: translateX(-50%); font-family: var(--sans); font-size: 0.65rem; color: var(--ink); opacity: 0.6; }
+  .lin .pin { position: absolute; width: 8px; height: 8px; border-radius: 50%; transform: translate(-50%, -3px); }
+  .lin .pin.big { width: 14px; height: 14px; transform: translate(-50%, -6px); box-shadow: 0 0 0 3px var(--panel); }
+  .lin .stem { position: absolute; width: 1px; background: var(--line); z-index: 0; }
+  .lin .pin { z-index: 1; }
+  .lin .ml { z-index: 2; }
+  .lin .ml { position: absolute; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--sans); font-size: 0.75rem; color: var(--muted); }
+  .lin .ml.big { font-family: Georgia, serif; font-size: 0.95rem; color: var(--ink); background: var(--panel-2); border: 1px solid var(--line); border-radius: 7px; padding: 0.1rem 0.5rem 0.1rem 0.4rem; display: flex; align-items: center; gap: 0.35rem; }
+  .lin .ml.big b { flex: none; width: 6px; height: 6px; border-radius: 50%; border: 3px solid; }
+  .lin .ml.focus { border-color: var(--gold); color: var(--gold); }
+  .lin .ml.key { font-size: 1.1rem; background: var(--gold); color: #1a1408; border-color: var(--gold); font-weight: bold; }
+  .lin .ml.key b { border-color: #1a1408 !important; }
+  .lin .pin.key { width: 18px; height: 18px; transform: translate(-50%, -8px); background: var(--gold) !important; }
+  .star.key { color: var(--gold); letter-spacing: -0.15em; }
+  h2.tight { margin-top: 1.25rem; }
+  .small-cards .ft { font-size: 1.05rem; }
+  .lin .ml.done { opacity: 0.45; text-decoration: line-through; }
+  .mlist { display: flex; flex-direction: column; gap: 0.35rem; }
+  .mrow { display: grid; grid-template-columns: auto minmax(0, 1fr) 9.5rem 9.5rem 8rem auto auto; gap: 0.5rem; align-items: center; }
+  .mrow input, .mrow select { background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 0.35rem 0.55rem; font-size: 15px; min-width: 0; width: 100%; color-scheme: dark; }
+  .mrow select { font-family: var(--sans); font-size: 13px; }
+  .mrow .mwhen { font-family: var(--sans); font-size: 0.72rem; color: var(--muted); }
+  .mrow.done input[data-m="title"] { color: var(--muted); text-decoration: line-through; }
+  .star { background: none; border: none; color: var(--line); font-size: 1.1rem; padding: 0 0.1rem; }
+  .star.on { color: var(--gold); }
+  @media (max-width: 760px) {
+    .mrow { grid-template-columns: auto minmax(0, 1fr) auto auto; padding: 0.5rem 0; border-bottom: 1px solid var(--line); }
+    .mrow input[type=month], .mrow select { grid-column: 2 / 3; }
+    .mrow .mwhen { grid-column: 2 / 3; }
+  }
   .five .yr { display: none; }
   .five .x { float: right; }
 
@@ -173,7 +219,7 @@
       { title: 'Meet with a pastor there; share where I sense God leading', start: '2027-04-01', due: '2027-06-30' }
     ].map(function (g) { return { id: uid(), area: 'church', title: g.title, start: g.start, due: g.due, done: false }; });
   }
-  var PREACHING = { id: 'preaching', name: 'My teaching ministry', years: {
+  var PREACHING = { id: 'preaching', name: 'Teaching & digital ministry', years: {
     2027: 'Preaching 12 times with honest feedback, and teaching every week on the podcast or Instagram',
     2028: 'A teaching ministry people follow: a steady podcast, a growing audience, invitations to speak',
     2029: 'Teaching that feeds the pathway: people step from a message into a group',
@@ -232,6 +278,30 @@
     if (!Array.isArray(st.now)) st.now = nowDraft();
   }
 
+  // The big things on the line. Dates are guesses to be moved.
+  function milestonesDraft() {
+    return [
+      ['Find my church', '2027-03', 'church', 'key'],
+      ['Podcast publishing weekly', '2027-03', 'preaching', false],
+      ['Weekly teaching on social media', '2027-02', 'preaching', false],
+      ['A digital ministry people follow', '2029-01', 'preaching', true],
+      ['Disciple-making pathway written', '2027-03', 'ministry', false],
+      ['2 men through stage one', '2027-06', 'ministry', false],
+      ['Campus discipleship cycle launches', '2027-09', 'ministry', false],
+      ['Engaged', '2027-12', 'marriage', false],
+      ['Marry the one God has for me', '2028-06', 'marriage', 'key'],
+      ['First child', '2029-09', 'marriage', true],
+      ['Invited to speak beyond my church', '2028-09', 'preaching', false],
+      ['My own teaching ministry established', '2031-01', 'preaching', true],
+      ['First leaders sent out', '2031-06', 'ministry', true],
+      ['Passive income covers much of our spending', '2036-01', 'provision', false],
+      ['A full house: 4–7 kids', '2037-01', 'marriage', true],
+      ['Free: time fully given to the calling', '2046-01', 'provision', true],
+      ['Oldest child launches', '2047-09', 'marriage', true],
+      ['Training the next generation of teachers', '2046-06', 'preaching', false]
+    ].map(function (x) { return { id: uid(), title: x[0], date: x[1], area: x[2], big: !!x[3], key: x[3] === 'key', done: false }; });
+  }
+
   // What is going on right now, from the Current tier of Building & Blessing.
   function nowDraft() {
     return [
@@ -251,7 +321,7 @@
   function draft() {
     function g(area, title, start, due) { return { id: uid(), area: area, title: title, start: start, due: due, done: false }; }
     return {
-      v: 6, isDraft: true, view: 'five', direction: DIRECTION,
+      v: 7, isDraft: true, view: 'five', direction: DIRECTION, milestones: milestonesDraft(),
       areas: [
         JSON.parse(JSON.stringify(CHURCH)),
         JSON.parse(JSON.stringify(PREACHING)),
@@ -285,7 +355,7 @@
 
   var state;
   try { state = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
-  if (!state || !Array.isArray(state.areas) || (state.isDraft && state.v !== 6)) state = draft();
+  if (!state || !Array.isArray(state.areas) || (state.isDraft && state.v !== 7)) state = draft();
   if (state.isDraft && !state.longDirection) addLong(state);
   // A plan already edited under v1: add preaching ahead of disciple-making, keep everything written.
   if (state.v === 1) {
@@ -344,6 +414,13 @@
   if (state.v === 5) {
     addLong(state);
     state.v = 6;
+  }
+  // v6 -> v7: the big milestones on a straight line.
+  if (state.v === 6) {
+    if (!Array.isArray(state.milestones)) state.milestones = milestonesDraft();
+    var tm = state.areas.find(function (a) { return a.id === 'preaching'; });
+    if (tm && tm.name === 'My teaching ministry') tm.name = PREACHING.name;
+    state.v = 7;
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
   }
   state.goals = state.goals || [];
@@ -373,7 +450,7 @@
   function render() {
     var titles = {
       long: 'The long view \u00b7 ' + YEARS[4] + '\u2013' + FIFTY + (state.born ? ' <span class="age">\u00b7 ages ' + age(YEARS[4]) + '\u2013' + age(FIFTY) + '</span>' : ''),
-      timeline: 'Over time \u00b7 ' + THIS_YEAR + '\u2013' + FIFTY + (state.born ? ' <span class="age">\u00b7 ages ' + age(THIS_YEAR) + '\u2013' + age(FIFTY) + '</span>' : ''),
+      timeline: 'Timeline' + (state.born ? ' <span class="age">\u00b7 age ' + age(THIS_YEAR) + ' now</span>' : ''),
       five: 'Five years \u00b7 ' + START + '\u2013' + YEARS[4] + (state.born ? ' <span class="age">\u00b7 ages ' + age(START) + '\u2013' + age(YEARS[4]) + '</span>' : ''),
       year: START + ageTag(START, '\u00b7 turning ')
     };
@@ -431,32 +508,119 @@
   var COLORS = ['#c9a25e', '#7fa8c9', '#8fbf8f', '#c98a9a', '#b7a6d9', '#c97f5e', '#9fc7c0', '#d6c27a'];
   function colorOf(id) { var i = state.areas.findIndex(function (a) { return a.id === id; }); return i < 0 ? 'var(--muted)' : COLORS[i % COLORS.length]; }
 
-  // One line down through life: what is happening now, then each horizon.
+  // A straight line through life: the big milestones above it, the smaller
+  // ones below, and the next big things pulled out as what to focus on now.
+  var ZOOMS = [10, 20, 50];
+  function ym(s) { var p = String(s || '').split('-'); return new Date(+p[0], p[1] ? +p[1] - 1 : 6, 15); }
+  function whenText(s) { var p = String(s || '').split('-'); return p[1] ? MONTHS[+p[1] - 1] + ' ' + p[0] : (p[0] || '?'); }
+  function until(s) {
+    var m = Math.round((ym(s) - today) / (30.44 * 864e5));
+    if (m <= 0) return 'now';
+    if (m < 12) return 'in ' + m + ' month' + (m === 1 ? '' : 's');
+    var y = Math.floor(m / 12), r = m % 12;
+    return 'in ' + y + ' yr' + (y === 1 ? '' : 's') + (r && y < 5 ? ' ' + r + ' mo' : '');
+  }
+  function ageAt(s) { return state.born ? ' · age ' + (ym(s).getFullYear() - state.born) : ''; }
+
   function timelineView() {
-    var stops = [[START, START === THIS_YEAR + 1 ? 'next year' : START === THIS_YEAR ? 'this year' : String(START)], [YEARS[4], '5 years'], [MID, '10 years'], [FAR, '20 years'], [FORTY, '40 years'], [FIFTY, '50 years']];
-    var h = '<p class="intro">What is happening now, and where it is all going over time. Tap any line to change it.</p><div class="tl">';
-    h += '<div class="node now"><div class="when"><b>Now</b><span>' + THIS_YEAR + (age(THIS_YEAR) != null ? ' \u00b7 age ' + age(THIS_YEAR) : '') + '</span></div>';
+    var ms = (state.milestones || []).slice().sort(function (a, b) { return ym(a.date) - ym(b.date); });
+    var keys = ms.filter(function (m) { return m.key && !m.done; });
+    var next = ms.filter(function (m) { return m.big && !m.key && !m.done && ym(m.date) >= new Date(today.getFullYear(), today.getMonth() - 1, 1); }).slice(0, 2);
+    var focus = keys.concat(next);
+    var h = '<p class="intro">The big things on one line. What stands out, and what to focus on now.</p>';
+
+    if (keys.length) {
+      h += '<h2 class="tight">The ' + (keys.length === 2 ? 'two ' : '') + 'biggest thing' + (keys.length === 1 ? '' : 's') + '</h2><div class="focus">' + keys.map(function (m) {
+        return '<div class="fcard first"><div class="ft">' + esc(m.title) + '</div><div class="fw">' + whenText(m.date) + ' \u00b7 ' + until(m.date) + ageAt(m.date) + '</div></div>';
+      }).join('') + '</div>';
+    }
+    if (next.length) {
+      h += '<div class="focus small-cards">' + next.map(function (m) {
+        return '<div class="fcard"><span class="label">Then</span><div class="ft">' + esc(m.title) + '</div><div class="fw">' + whenText(m.date) + ' \u00b7 ' + until(m.date) + ageAt(m.date) + '</div></div>';
+      }).join('') + '</div>';
+    }
+
+    // Axis
+    var zoom = state.zoom || 10;
+    var t0 = new Date(THIS_YEAR, 0, 1), t1 = new Date(THIS_YEAR + zoom, 0, 1);
+    var W = Math.max(720, zoom * (zoom <= 10 ? 110 : zoom <= 20 ? 70 : 34));
+    function X(d) { return 16 + (d - t0) / (t1 - t0) * (W - 32); }
+    var inRange = ms.filter(function (m) { var d = ym(m.date); return d >= t0 && d < t1 && (state.showAll || m.big); });
+    var later = ms.filter(function (m) { return ym(m.date) >= t1 && (state.showAll || m.big); }).length;
+
+    // Lanes so labels never overlap: big ones stack upward, small ones downward.
+    function lanes(list) {
+      var ends = [], out = [];
+      list.forEach(function (m) {
+        var x = X(ym(m.date)), w = Math.min(260, (m.key ? 30 : 16) + m.title.length * (m.key ? 9 : 7));
+        var k = 0; while (ends[k] != null && ends[k] > x - 4) k++;
+        ends[k] = x + w; out.push({ m: m, x: x, k: k, w: w });
+      });
+      return { items: out, n: ends.length };
+    }
+    var up = lanes(inRange.filter(function (m) { return m.big; }));
+    var down = lanes(inRange.filter(function (m) { return !m.big; }));
+    var LANE = 44, axis = 24 + Math.max(1, up.n) * LANE + 10, H = axis + 34 + (down.n ? down.n * 30 : 10);
+
+    h += '<div class="zoom">' + ZOOMS.map(function (z) {
+      return '<button data-zoom="' + z + '" class="' + (z === zoom ? 'on' : '') + '">' + z + ' years</button>';
+    }).join('') + '<button data-act="show-all" class="' + (state.showAll ? 'on' : '') + '">' + (state.showAll ? 'All milestones' : 'Big ones only') + '</button>' + (later ? '<span class="muted small">' + later + ' more beyond ' + (THIS_YEAR + zoom - 1) + '</span>' : '') + '</div>';
+
+    h += '<div class="lin-wrap"><div class="lin" style="width:' + W + 'px;height:' + H + 'px">';
+    h += '<div class="axis" style="top:' + axis + 'px"></div>';
+    var step = zoom <= 10 ? 1 : zoom <= 20 ? 2 : 5;
+    for (var y = THIS_YEAR; y <= THIS_YEAR + zoom; y += step) {
+      var x = X(new Date(y, 0, 1));
+      h += '<div class="tick" style="left:' + x + 'px;top:' + (axis - 4) + 'px"></div>' +
+        '<div class="yl" style="left:' + x + 'px;top:' + (axis + 8) + 'px">' + y + (state.born ? '<i>' + (y - state.born) + '</i>' : '') + '</div>';
+    }
+    var nx = X(today);
+    h += '<div class="nowline" style="left:' + nx + 'px;height:' + H + 'px"></div><div class="nowlab" style="left:' + nx + 'px">Now</div>';
+    var focusIds = focus.map(function (m) { return m.id; });
+    up.items.forEach(function (it) {
+      var top = axis - 16 - (it.k + 1) * LANE + 6;
+      h += '<div class="stem" style="left:' + it.x + 'px;top:' + (top + 22) + 'px;height:' + (axis - top - 22) + 'px"></div>' +
+        '<div class="ml big' + (it.m.key ? ' key' : '') + (it.m.done ? ' done' : '') + (focusIds.indexOf(it.m.id) > -1 ? ' focus' : '') + '" style="left:' + (it.x - 8) + 'px;top:' + top + 'px;max-width:' + it.w + 'px" title="' + esc(whenText(it.m.date)) + '">' +
+        '<b style="border-color:' + colorOf(it.m.area) + '"></b>' + esc(it.m.title) + '</div>' +
+        '<div class="pin big' + (it.m.key ? ' key' : '') + '" style="left:' + it.x + 'px;top:' + axis + 'px;background:' + colorOf(it.m.area) + '"></div>';
+    });
+    down.items.forEach(function (it) {
+      var top = axis + 34 + it.k * 30;
+      h += '<div class="stem thin" style="left:' + it.x + 'px;top:' + axis + 'px;height:' + (top - axis) + 'px"></div>' +
+        '<div class="ml' + (it.m.done ? ' done' : '') + '" style="left:' + (it.x - 4) + 'px;top:' + top + 'px;max-width:' + it.w + 'px" title="' + esc(whenText(it.m.date)) + '">' + esc(it.m.title) + '</div>' +
+        '<div class="pin" style="left:' + it.x + 'px;top:' + axis + 'px;background:' + colorOf(it.m.area) + '"></div>';
+    });
+    h += '</div></div>';
+
+    // Editable list
+    h += '<button class="add" data-act="ms-edit">' + (state.editMs ? 'Done editing' : 'Edit milestones (' + ms.length + ')') + '</button>';
+    if (state.editMs) {
+      h += '<h2>Milestones <span class="label">★ big · ★★ one of the biggest</span></h2><div class="mlist">';
+      ms.forEach(function (m) {
+        h += '<div class="mrow' + (m.done ? ' done' : '') + '" data-ms-id="' + m.id + '">' +
+          '<button class="star' + (m.big ? ' on' : '') + (m.key ? ' key' : '') + '" data-act="m-big" title="Tap: big, then one of the biggest">' + (m.key ? '\u2605\u2605' : '\u2605') + '</button>' +
+          '<input type="text" data-m="title" value="' + esc(m.title) + '" placeholder="Milestone">' +
+          '<input type="month" data-m="date" value="' + (/^\d{4}-\d{2}$/.test(m.date) ? m.date : '') + '">' +
+          '<select data-m="area"><option value="">—</option>' + state.areas.map(function (a) {
+            return '<option value="' + a.id + '"' + (a.id === m.area ? ' selected' : '') + '>' + esc(a.name || 'Untitled') + '</option>'; }).join('') + '</select>' +
+          '<span class="mwhen">' + until(m.date) + ageAt(m.date) + '</span>' +
+          '<button class="check' + (m.done ? ' on' : '') + '" data-act="m-done" title="Happened">' + (m.done ? '✓' : '') + '</button>' +
+          '<button class="x" data-act="m-del" title="Remove">×</button></div>';
+      });
+      h += '</div><button class="add" data-act="m-add">+ Milestone</button>';
+    }
+
+    // What is going on right now
+    h += '<h2>Happening now <span class="label">' + THIS_YEAR + ageTag(THIS_YEAR) + '</span></h2><div class="nowlist">';
     (state.now || []).forEach(function (n) {
       h += '<div class="it" data-now="' + n.id + '"><i class="dot" style="background:' + colorOf(n.area) + '"></i>' +
-        '<div class="body"><span class="an"><select data-now-area="1" aria-label="Area"><option value="">\u2014</option>' + state.areas.map(function (a) {
+        '<div class="body"><span class="an"><select data-now-area="1" aria-label="Area"><option value="">—</option>' + state.areas.map(function (a) {
           return '<option value="' + a.id + '"' + (a.id === n.area ? ' selected' : '') + '>' + esc(a.name || 'Untitled') + '</option>'; }).join('') + '</select></span>' +
         '<div contenteditable="true" data-now-text="1" data-ph="Something happening now">' + esc(n.text) + '</div></div>' +
-        '<button class="x" data-act="now-del" title="Remove">\u00d7</button></div>';
+        '<button class="x" data-act="now-del" title="Remove">×</button></div>';
     });
-    h += '<button class="add" data-act="now-add">+ Something happening now</button></div>';
-    var prev = THIS_YEAR;
-    stops.forEach(function (st) {
-      var y = st[0], gap = Math.min(220, Math.max(24, (y - prev) * 9));
-      prev = y;
-      var items = state.areas.map(function (a, i) {
-        if (!a.years[y]) return '';
-        return '<div class="it"><i class="dot" style="background:' + COLORS[i % COLORS.length] + '"></i><div class="body"><span class="an">' + esc(a.name || 'Untitled') + '</span>' +
-          ed('areas.' + i + '.years.' + y, a.years[y], '') + '</div></div>';
-      }).join('');
-      h += '<div class="node" style="margin-top:' + gap + 'px"><div class="when"><b>' + y + '</b><span>' + st[1] + (age(y) != null ? ' \u00b7 age ' + age(y) : '') + '</span></div>' +
-        (items || '<div class="muted small">Nothing written for ' + y + ' yet.</div>') + '</div>';
-    });
-    return h + '</div>';
+    h += '</div><button class="add" data-act="now-add">+ Something happening now</button>';
+    return h;
   }
 
   function thisYear() {
@@ -508,6 +672,7 @@
   function changed() { state.isDraft = false; save(); }
 
   document.addEventListener('change', function (e) {
+    if (e.target.dataset.m) { msItem(e.target)[e.target.dataset.m] = e.target.value; changed(); render(); return; }
     if (e.target.dataset.nowArea) { nowItem(e.target).area = e.target.value; changed(); render(); return; }
     if (e.target.id !== 'born') return;
     var v = parseInt(e.target.value, 10);
@@ -518,10 +683,11 @@
     if (e.target.dataset.path) { setPath(e.target.dataset.path, e.target.textContent.trim()); changed(); }
     else if (e.target.dataset.nowText) { nowItem(e.target).text = e.target.textContent.trim(); changed(); }
   });
+  function msItem(el) { var id = el.closest('[data-ms-id]').dataset.msId; return state.milestones.find(function (m) { return m.id === id; }); }
   function nowItem(el) { var id = el.closest('[data-now]').dataset.now; return state.now.find(function (n) { return n.id === id; }); }
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Enter') return;
-    if (e.target.isContentEditable) { e.preventDefault(); e.target.blur(); }
+    if (e.target.isContentEditable || e.target.dataset.m) { e.preventDefault(); e.target.blur(); }
     else if (e.target.closest('.editor')) { var s = document.querySelector('[data-act="save"]'); if (s) s.click(); }
   });
   document.addEventListener('paste', function (e) {
@@ -531,6 +697,8 @@
   });
 
   document.addEventListener('click', function (e) {
+    var z = e.target.closest('[data-zoom]');
+    if (z) { state.zoom = +z.dataset.zoom; save(); render(); return; }
     var v = e.target.closest('[data-view]');
     if (v) { state.view = v.dataset.view; openId = null; save(); render(); return; }
     var el = e.target.closest('[data-act]'); if (!el) return;
@@ -559,6 +727,18 @@
         var n = { id: uid(), area: el.dataset.area, title: '', start: start, due: due, done: false };
         state.goals.push(n); openId = n.id; changed(); render(); focusTitle(); return;
       }
+      case 'show-all': state.showAll = !state.showAll; break;
+      case 'ms-edit': state.editMs = !state.editMs; break;
+      case 'm-big': { var mm = msItem(el); if (mm.key) { mm.key = false; mm.big = false; } else if (mm.big) mm.key = true; else mm.big = true; break; }
+      case 'm-done': msItem(el).done = !msItem(el).done; break;
+      case 'm-del': { var mid = el.closest('[data-ms-id]').dataset.msId; state.milestones = state.milestones.filter(function (m) { return m.id !== mid; }); break; }
+      case 'm-add': {
+        var d = new Date(today.getFullYear(), today.getMonth() + 6, 1);
+        var nm = { id: uid(), title: '', date: d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'), area: '', big: false, done: false };
+        (state.milestones = state.milestones || []).push(nm); changed(); render();
+        var inp = document.querySelector('[data-ms-id="' + nm.id + '"] [data-m="title"]'); if (inp) inp.focus();
+        return;
+      }
       case 'now-del': { var nid = el.closest('[data-now]').dataset.now; state.now = state.now.filter(function (n) { return n.id !== nid; }); break; }
       case 'now-add': {
         var item = { id: uid(), area: '', text: '' };
@@ -580,7 +760,7 @@
       }
       case 'blank':
         if (!confirm('Clear the draft and start blank?')) return;
-        state = { v: 6, isDraft: false, longDirection: '', now: [], born: state.born || null, view: state.view, direction: '', areas: [{ id: uid(), name: '', years: {} }], goals: [] };
+        state = { v: 7, isDraft: false, longDirection: '', now: [], milestones: [], born: state.born || null, view: state.view, direction: '', areas: [{ id: uid(), name: '', years: {} }], goals: [] };
         break;
       default: return;
     }
