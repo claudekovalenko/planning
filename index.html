@@ -200,7 +200,7 @@
   function draft() {
     function g(area, title, start, due) { return { id: uid(), area: area, title: title, start: start, due: due, done: false }; }
     return {
-      v: 4, isDraft: true, view: 'long', direction: DIRECTION,
+      v: 4, isDraft: true, view: 'five', direction: DIRECTION,
       areas: [
         JSON.parse(JSON.stringify(CHURCH)),
         JSON.parse(JSON.stringify(PREACHING)),
@@ -273,6 +273,7 @@
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
   }
   state.goals = state.goals || [];
+  state.view = 'five';   // always open on the five-year plan
   function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
 
   var openId = null;   // goal whose editor is open
@@ -301,7 +302,7 @@
       year: START + ageTag(START, '\u00b7 turning ')
     };
     var h = '<header><h1>' + titles[state.view] + '</h1><div class="switch">' +
-      [['long', '20 years'], ['five', '5 years'], ['year', String(START)]].map(function (v) {
+      [['five', '5 years'], ['long', '20 years'], ['year', String(START)]].map(function (v) {
         return '<button data-view="' + v[0] + '" class="' + (state.view === v[0] ? 'on' : '') + '">' + v[1] + '</button>';
       }).join('') + '</div></header>';
     h += state.view === 'long'
