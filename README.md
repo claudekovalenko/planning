@@ -6,6 +6,7 @@ Two views:
   first, then Preaching, then Disciple-making growing out of it, then Walk with God, Marriage & family,
   Health, Provision. For each area: where I want to be by 2031, and a milestone
   for the end of each year from 2027 to 2030. Tap any cell to write in it.
+  Enter your birth year and each year shows the age you will be.
 - **2027:** the dated goals for this year, grouped by area under that area's
   2027 milestone. Each goal is a bar across Jan–Dec from its start date to its
   deadline, with days left, overdue goals shown in red, and a line marking today.

@@ -45,6 +45,10 @@
   .intro { margin-top: 0.75rem; color: var(--muted); font-size: 0.92rem; max-width: 40rem; }
   .direction { border-left: 2px solid var(--gold); padding: 0.15rem 0 0.15rem 0.9rem; margin-top: 1rem; max-width: 46rem; }
   .direction .text { font-style: italic; font-size: 1.05rem; margin-top: 0.2rem; }
+  .born { margin-top: 0.75rem; font-family: var(--sans); font-size: 0.8rem; color: var(--muted); display: flex; align-items: center; gap: 0.5rem; }
+  .born input { width: 5.5rem; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 0.25rem 0.5rem; font-size: 16px; }
+  .age { font-family: var(--sans); font-size: 0.75em; color: var(--muted); font-weight: normal; white-space: nowrap; }
+  .hd.goal .age, .cell.end .yr .age { color: var(--gold); opacity: 0.8; }
   .draft { margin-top: 1rem; font-family: var(--sans); font-size: 0.8rem; color: var(--muted); }
   .draft button { background: none; border: none; color: var(--gold); text-decoration: underline; text-underline-offset: 3px; font-size: 0.8rem; }
 
@@ -116,6 +120,8 @@
     .five > .cell { display: grid; grid-template-columns: 3.2rem 1fr; gap: 0.5rem; }
     .five > .cell.end { background: none; }
     .five > .cell.now { background: none; }
+    .five .cell { grid-template-columns: 3.6rem 1fr; }
+    .five .yr .age { display: block; font-size: 0.7rem; }
     .five .yr { display: block; font-family: var(--sans); font-size: 0.75rem; color: var(--muted); padding-top: 0.15rem; }
     .five .cell.end .yr { color: var(--gold); }
   }
@@ -256,15 +262,21 @@
   function daysTo(s) { return Math.round((parse(s) - today) / 864e5); }
   function short(s) { return parse(s).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }); }
 
+  // Age reached by the end of a year (birthday falls somewhere in it).
+  function age(y) { return state.born ? y - state.born : null; }
+  function ageTag(y, pre) { var a = age(y); return a == null ? '' : ' <span class="age">' + (pre || '\u00b7 age ') + a + '</span>'; }
+
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function ed(path, value, ph, cls) { return '<div' + (cls ? ' class="' + cls + '"' : '') + ' contenteditable="true" data-path="' + path + '" data-ph="' + esc(ph) + '">' + esc(value) + '</div>'; }
 
   /* ── views ── */
   function render() {
-    var h = '<header><h1>' + (state.view === 'five' ? 'Five years · ' + START + '–' + YEARS[4] : START) + '</h1>' +
+    var h = '<header><h1>' + (state.view === 'five' ? 'Five years · ' + START + '–' + YEARS[4] + (state.born ? ' <span class="age">· ages ' + age(START) + '–' + age(YEARS[4]) + '</span>' : '') : START + ageTag(START, '· turning ')) + '</h1>' +
       '<div class="switch"><button data-view="five" class="' + (state.view === 'five' ? 'on' : '') + '">5 years</button>' +
       '<button data-view="year" class="' + (state.view === 'year' ? 'on' : '') + '">' + START + '</button></div></header>';
     h += '<div class="direction"><span class="label">The direction</span>' + ed('direction', state.direction, 'Where I sense God leading over these five years', 'text') + '</div>';
+    h += '<label class="born">Born in <input type="number" inputmode="numeric" id="born" min="1930" max="2026" placeholder="year" value="' + (state.born || '') + '">' +
+      (state.born ? '<span>' + age(new Date().getFullYear()) + ' this year</span>' : '<span>to see your age beside each year</span>') + '</label>';
     h += state.view === 'five' ? fiveYears() : thisYear();
     if (state.isDraft) h += '<p class="draft">A starting draft from your Vision. Tap any text to rewrite it. <button data-act="blank">Start blank</button></p>';
     h += '<div class="foot">“The heart of man plans his way, but the LORD establishes his steps.”<span>PROVERBS 16:9</span></div>';
@@ -274,13 +286,13 @@
   function fiveYears() {
     var h = '<p class="intro">Where you want to be by ' + YEARS[4] + ' in each area, and the milestone for the end of each year on the way there.</p>';
     h += '<div class="five"><div class="hd">Area</div>' + YEARS.map(function (y) {
-      return '<div class="hd' + (y === YEARS[4] ? ' goal' : '') + '">' + (y === YEARS[4] ? 'By ' + y + ' — the goal' : 'End of ' + y) + '</div>';
+      return '<div class="hd' + (y === YEARS[4] ? ' goal' : '') + '">' + (y === YEARS[4] ? 'By ' + y + ' — the goal' : 'End of ' + y) + ageTag(y) + '</div>';
     }).join('');
     state.areas.forEach(function (a, i) {
       h += '<div class="area"><button class="x" data-act="area-del" data-i="' + i + '" title="Remove area">×</button>' + ed('areas.' + i + '.name', a.name, 'Area', 'name') + '</div>';
       YEARS.forEach(function (y) {
         var cls = 'cell' + (y === YEARS[4] ? ' end' : '') + (y === START ? ' now' : '');
-        h += '<div class="' + cls + '"><span class="yr">' + (y === YEARS[4] ? 'By ' + y : y) + '</span>' +
+        h += '<div class="' + cls + '"><span class="yr">' + (y === YEARS[4] ? 'By ' + y : y) + ageTag(y, 'age ') + '</span>' +
           ed('areas.' + i + '.years.' + y, a.years[y], y === YEARS[4] ? 'Where I want to be' : 'Milestone') + '</div>';
       });
     });
@@ -336,6 +348,12 @@
   }
   function changed() { state.isDraft = false; save(); }
 
+  document.addEventListener('change', function (e) {
+    if (e.target.id !== 'born') return;
+    var v = parseInt(e.target.value, 10);
+    state.born = v >= 1930 && v <= 2026 ? v : null;
+    changed(); render();
+  });
   document.addEventListener('input', function (e) {
     if (e.target.dataset.path) { setPath(e.target.dataset.path, e.target.textContent.trim()); changed(); }
   });
@@ -393,7 +411,7 @@
       }
       case 'blank':
         if (!confirm('Clear the draft and start blank?')) return;
-        state = { v: 3, isDraft: false, view: state.view, direction: '', areas: [{ id: uid(), name: '', years: {} }], goals: [] };
+        state = { v: 3, isDraft: false, born: state.born || null, view: state.view, direction: '', areas: [{ id: uid(), name: '', years: {} }], goals: [] };
         break;
       default: return;
     }
