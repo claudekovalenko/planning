@@ -1,7 +1,9 @@
 # Five-Year Plan
 
-Two views:
+Three views, from far to near:
 
+- **20 years:** where it is all heading, then each area's five-year goal (2031),
+  where it is in 10 years (2036) and in 20 years (2046), with ages.
 - **5 years:** the direction for the five years, then a few areas of life — Church home
   first, then Preaching, then Disciple-making growing out of it, then Walk with God, Marriage & family,
   Health, Provision. For each area: where I want to be by 2031, and a milestone
