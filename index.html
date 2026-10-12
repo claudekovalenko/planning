@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>2027</title>
+<title>Five-Year Plan</title>
 <meta name="theme-color" content="#0f1115">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,40 +14,109 @@
   :root {
     --bg: #0f1115;
     --panel: #181b22;
+    --panel-2: #1e222b;
     --ink: #e8e6e1;
     --muted: #9a978f;
     --gold: #c9a25e;
     --gold-soft: rgba(201, 162, 94, 0.15);
     --line: #2a2e38;
+    --green: #8fbf8f;
+    --rust: #b06557;
     --sans: 'Helvetica Neue', Arial, sans-serif;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: var(--bg); color: var(--ink);
-    font-family: Georgia, 'Times New Roman', serif; line-height: 1.5; min-height: 100vh;
-  }
-  .wrap { max-width: 560px; margin: 0 auto; padding: 3rem 16px 4rem; }
-  .label { font-family: var(--sans); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+  body { background: var(--bg); color: var(--ink); font-family: Georgia, 'Times New Roman', serif; line-height: 1.5; min-height: 100vh; }
+  button, input, select { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 1.5rem 16px 4rem; }
+  .label { font-family: var(--sans); font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+  .muted { color: var(--muted); }
 
   [contenteditable] { outline: none; border-radius: 4px; cursor: text; }
-  [contenteditable]:focus { background: var(--gold-soft); box-shadow: 0 0 0 4px var(--gold-soft); }
-  [contenteditable]:empty::before { content: attr(data-ph); color: var(--muted); font-style: italic; }
+  [contenteditable]:focus { background: var(--gold-soft); box-shadow: 0 0 0 3px var(--gold-soft); }
+  [contenteditable]:empty::before { content: attr(data-ph); color: var(--muted); font-style: italic; opacity: 0.7; }
 
-  .year { font-size: 3.5rem; line-height: 1; color: var(--gold); }
-  .lead { margin-top: 2rem; }
-  .lead .text { font-size: 1.3rem; font-style: italic; margin-top: 0.4rem; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  h1 { font-weight: normal; font-size: 1.6rem; }
+  .switch { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .switch button { background: none; border: none; padding: 0.5rem 1rem; font-family: var(--sans); font-size: 0.85rem; color: var(--muted); }
+  .switch button + button { border-left: 1px solid var(--line); }
+  .switch button.on { background: var(--gold); color: #1a1408; font-weight: 600; }
+  .intro { margin-top: 0.75rem; color: var(--muted); font-size: 0.92rem; max-width: 40rem; }
+  .draft { margin-top: 1rem; font-family: var(--sans); font-size: 0.8rem; color: var(--muted); }
+  .draft button { background: none; border: none; color: var(--gold); text-decoration: underline; text-underline-offset: 3px; font-size: 0.8rem; }
 
-  .goal { margin-top: 2.25rem; }
-  .goal .num { color: var(--gold); font-family: var(--sans); font-size: 0.8rem; }
-  .goal .text { font-size: 1.2rem; margin-top: 0.15rem; }
-  .step { display: flex; gap: 0.75rem; align-items: flex-start; margin-top: 0.75rem; padding: 0.75rem 0.9rem; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; }
-  .step .text { flex: 1; min-width: 0; }
-  .check { flex: none; width: 24px; height: 24px; border: 1.5px solid var(--muted); border-radius: 50%; background: none; cursor: pointer; }
-  .check:hover { border-color: var(--gold); }
-  .taken { margin-top: 0.4rem; font-family: var(--sans); font-size: 0.75rem; color: var(--muted); }
+  /* ── 5 years ── */
+  .five { margin-top: 1.5rem; display: grid; grid-template-columns: 11rem repeat(4, 1fr) 1.25fr; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .five > div { padding: 0.8rem 0.85rem; border-top: 1px solid var(--line); border-left: 1px solid var(--line); font-size: 0.92rem; min-width: 0; overflow-wrap: anywhere; }
+  .five > .hd { border-top: none; background: var(--panel); font-family: var(--sans); font-size: 0.78rem; color: var(--muted); }
+  .five > .hd.goal { color: var(--gold); }
+  .five > .area { border-left: none; background: var(--panel); }
+  .five > .area .name { font-size: 1rem; }
+  .five > .cell.end { background: rgba(201, 162, 94, 0.07); }
+  .five > .cell.now { background: rgba(255, 255, 255, 0.02); }
+  .five .yr { display: none; }
+  .five .x { float: right; }
 
-  .foot { margin-top: 3.5rem; text-align: center; font-style: italic; color: var(--muted); font-size: 0.9rem; }
+  /* ── 2027 timeline ── */
+  .months { display: grid; grid-template-columns: repeat(12, 1fr); margin-top: 1.5rem; font-family: var(--sans); font-size: 0.7rem; color: var(--muted); position: sticky; top: 0; background: var(--bg); padding: 0.5rem 0; z-index: 2; border-bottom: 1px solid var(--line); }
+  .months span { text-align: left; padding-left: 3px; }
+  .months span.cur { color: var(--gold); }
+  .group { margin-top: 1.5rem; }
+  .group-head { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; }
+  .group-head .name { font-size: 1.1rem; }
+  .group-head .yeargoal { font-size: 0.88rem; color: var(--muted); flex: 1 1 16rem; }
+  .group-head .yeargoal b { font-weight: normal; color: var(--gold); font-family: var(--sans); font-size: 0.7rem; letter-spacing: 0.12em; margin-right: 0.35rem; }
+
+  .row { margin-top: 0.6rem; }
+  .row-top { display: flex; align-items: center; gap: 0.6rem; }
+  .check { flex: none; width: 20px; height: 20px; border: 1.5px solid var(--muted); border-radius: 50%; background: none; display: grid; place-items: center; font-size: 12px; color: var(--bg); }
+  .check.on { background: var(--green); border-color: var(--green); }
+  .row-title { flex: 1; min-width: 0; cursor: pointer; }
+  .row.done .row-title { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
+  .due { font-family: var(--sans); font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
+  .due.soon { color: var(--gold); }
+  .due.late { color: var(--rust); }
+  .track {
+    position: relative; height: 12px; margin-top: 0.35rem; border-radius: 3px;
+    background-image: repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px calc(100% / 12));
+    background-color: var(--panel);
+  }
+  .bar { position: absolute; top: 2px; bottom: 2px; border-radius: 3px; background: var(--gold); min-width: 6px; }
+  .row.done .bar { background: var(--green); opacity: 0.6; }
+  .row.late .bar { background: var(--rust); }
+  .today { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--ink); opacity: 0.7; }
+
+  .editor { margin-top: 0.6rem; padding: 0.8rem; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+  .editor .full { grid-column: 1 / -1; }
+  .editor label { display: block; font-family: var(--sans); font-size: 0.7rem; color: var(--muted); margin-bottom: 0.2rem; letter-spacing: 0.08em; text-transform: uppercase; }
+  .editor input, .editor select { width: 100%; background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 0.45rem 0.6rem; font-size: 16px; }
+  .editor input[type=date] { color-scheme: dark; }
+  .editor .actions { grid-column: 1 / -1; display: flex; gap: 0.5rem; }
+  .editor .actions .sp { flex: 1; }
+  .btn { background: var(--gold); color: #1a1408; border: none; border-radius: 8px; padding: 0.45rem 1rem; font-family: var(--sans); font-size: 0.85rem; font-weight: 600; }
+  .btn.ghost { background: none; color: var(--ink); border: 1px solid var(--line); font-weight: normal; }
+  .btn.del { background: none; color: var(--rust); border: 1px solid var(--rust); font-weight: normal; }
+  .add { margin-top: 0.6rem; background: none; border: 1px dashed var(--line); border-radius: 8px; padding: 0.35rem 0.8rem; font-family: var(--sans); font-size: 0.8rem; color: var(--muted); }
+  .add:hover { color: var(--gold); border-color: var(--gold); }
+  .x { background: none; border: none; color: var(--muted); opacity: 0.5; font-size: 1rem; line-height: 1; }
+  .x:hover { opacity: 1; color: var(--rust); }
+
+  .foot { margin-top: 3rem; text-align: center; font-style: italic; color: var(--muted); font-size: 0.9rem; }
   .foot span { display: block; font-style: normal; font-family: var(--sans); font-size: 0.68rem; letter-spacing: 0.14em; margin-top: 0.25rem; }
+
+  /* Phones: the five-year table becomes one card per area, years stacked. */
+  @media (max-width: 760px) {
+    .five { display: block; border: none; }
+    .five > .hd { display: none; }
+    .five > div { border: none; padding: 0.35rem 0; }
+    .five > .area { background: none; margin-top: 1.5rem; padding-bottom: 0.2rem; border-bottom: 1px solid var(--line); }
+    .five > .cell { display: grid; grid-template-columns: 3.2rem 1fr; gap: 0.5rem; }
+    .five > .cell.end { background: none; }
+    .five > .cell.now { background: none; }
+    .five .yr { display: block; font-family: var(--sans); font-size: 0.75rem; color: var(--muted); padding-top: 0.15rem; }
+    .five .cell.end .yr { color: var(--gold); }
+  }
 </style>
 </head>
 <body>
@@ -57,46 +126,153 @@
 (function () {
   'use strict';
 
-  var KEY = 'planning.simple.v1';
-  var DRAFT = {
-    lead: 'Planted in one church, making disciples on campus, and getting ready to be a husband.',
-    goals: [
-      { text: 'Raise up disciples', step: 'Write my disciple-making pathway on one page', taken: 0 },
-      { text: 'Be planted', step: 'Decide which church I am committing to', taken: 0 },
-      { text: 'Prepare for marriage', step: 'Ask a married mentor to walk with me', taken: 0 }
-    ]
-  };
+  var KEY = 'planning.five.v1';
+  var START = 2027, YEARS = [2027, 2028, 2029, 2030, 2031];
+  var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+
+  /* Starting draft, drawn from the Vision app. 2028-2030 are left open on
+     purpose; those are for you to fill. */
+  function draft() {
+    function g(area, title, start, due) { return { id: uid(), area: area, title: title, start: start, due: due, done: false }; }
+    return {
+      v: 1, isDraft: true, view: 'five',
+      areas: [
+        { id: 'god', name: 'Walk with God', years: {
+          2027: 'Read through the whole Bible; a daily rhythm of prayer',
+          2031: 'Deeply saturated in the Word, praying daily, obeying what I read' } },
+        { id: 'ministry', name: 'Ministry', years: {
+          2027: 'Planted in a church; pathway written and tested with 2 men',
+          2031: 'Disciples on campus who make disciples, with leaders sent out' } },
+        { id: 'marriage', name: 'Marriage & family', years: {
+          2027: 'Clear marriage-prep steps, a married mentor, solid friendships',
+          2031: 'Married, leading a home with a strong, good culture' } },
+        { id: 'health', name: 'Health', years: {
+          2027: 'Training 3x a week, measurably stronger',
+          2031: 'A strong body that carries the calling for the long haul' } },
+        { id: 'provision', name: 'Provision', years: {
+          2027: 'One income experiment tested; support raising decided',
+          2031: 'Provision that frees my time for disciple-making' } }
+      ],
+      goals: [
+        g('god', 'Read through the Bible', '2027-01-01', '2027-12-31'),
+        g('ministry', 'Decide which church I’m planted in', '2027-01-01', '2027-02-28'),
+        g('ministry', 'Write my disciple-making pathway', '2027-01-04', '2027-03-31'),
+        g('ministry', 'Walk 2 men through stage one', '2027-04-01', '2027-06-30'),
+        g('ministry', 'Launch a discipleship cycle on campus', '2027-08-01', '2027-09-15'),
+        g('marriage', 'Ask a married mentor to walk with me', '2027-01-01', '2027-03-31'),
+        g('marriage', 'Meet regularly with 2–3 men', '2027-02-01', '2027-12-31'),
+        g('health', 'Train 3x a week and retest lifts', '2027-01-04', '2027-06-30'),
+        g('provision', 'Test one AI income idea', '2027-02-01', '2027-05-31'),
+        g('provision', 'Decide how support raising fits', '2027-03-01', '2027-04-30')
+      ]
+    };
+  }
 
   var state;
   try { state = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
-  if (!state || !Array.isArray(state.goals)) state = JSON.parse(JSON.stringify(DRAFT));
+  if (!state || !Array.isArray(state.areas)) state = draft();
+  state.goals = state.goals || [];
   function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
 
-  function esc(s) { return String(s || '').replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
-  function ed(path, value, ph) { return '<div class="text" contenteditable="true" data-path="' + path + '" data-ph="' + ph + '">' + esc(value) + '</div>'; }
+  var openId = null;   // goal whose editor is open
 
+  /* ── dates ── */
+  function parse(s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function iso(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  var Y0 = new Date(START, 0, 1), Y1 = new Date(START + 1, 0, 1), SPAN = Y1 - Y0;
+  function frac(d) { return Math.max(0, Math.min(1, (d - Y0) / SPAN)); }
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  function daysTo(s) { return Math.round((parse(s) - today) / 864e5); }
+  function short(s) { return parse(s).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }); }
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function ed(path, value, ph, cls) { return '<div' + (cls ? ' class="' + cls + '"' : '') + ' contenteditable="true" data-path="' + path + '" data-ph="' + esc(ph) + '">' + esc(value) + '</div>'; }
+
+  /* ── views ── */
   function render() {
-    var h = '<div class="year">2027</div>' +
-      '<div class="lead"><span class="label">Where God is leading me</span>' + ed('lead', state.lead, 'One sentence') + '</div>';
-    state.goals.forEach(function (g, i) {
-      h += '<div class="goal"><span class="num">' + (i + 1) + '</span>' + ed('goals.' + i + '.text', g.text, 'Something for this year') +
-        '<div class="step"><button class="check" data-done="' + i + '" aria-label="Step done"></button>' +
-        ed('goals.' + i + '.step', g.step, 'Next step') + '</div>' +
-        (g.taken ? '<div class="taken">' + g.taken + ' step' + (g.taken === 1 ? '' : 's') + ' taken</div>' : '') + '</div>';
-    });
+    var h = '<header><h1>' + (state.view === 'five' ? 'Five years · ' + START + '–' + YEARS[4] : START) + '</h1>' +
+      '<div class="switch"><button data-view="five" class="' + (state.view === 'five' ? 'on' : '') + '">5 years</button>' +
+      '<button data-view="year" class="' + (state.view === 'year' ? 'on' : '') + '">' + START + '</button></div></header>';
+    h += state.view === 'five' ? fiveYears() : thisYear();
+    if (state.isDraft) h += '<p class="draft">A starting draft from your Vision. Tap any text to rewrite it. <button data-act="blank">Start blank</button></p>';
     h += '<div class="foot">“The heart of man plans his way, but the LORD establishes his steps.”<span>PROVERBS 16:9</span></div>';
     document.getElementById('app').innerHTML = h;
   }
 
+  function fiveYears() {
+    var h = '<p class="intro">Where you want to be by ' + YEARS[4] + ' in each area, and the milestone for the end of each year on the way there.</p>';
+    h += '<div class="five"><div class="hd">Area</div>' + YEARS.map(function (y) {
+      return '<div class="hd' + (y === YEARS[4] ? ' goal' : '') + '">' + (y === YEARS[4] ? 'By ' + y + ' — the goal' : 'End of ' + y) + '</div>';
+    }).join('');
+    state.areas.forEach(function (a, i) {
+      h += '<div class="area"><button class="x" data-act="area-del" data-i="' + i + '" title="Remove area">×</button>' + ed('areas.' + i + '.name', a.name, 'Area', 'name') + '</div>';
+      YEARS.forEach(function (y) {
+        var cls = 'cell' + (y === YEARS[4] ? ' end' : '') + (y === START ? ' now' : '');
+        h += '<div class="' + cls + '"><span class="yr">' + (y === YEARS[4] ? 'By ' + y : y) + '</span>' +
+          ed('areas.' + i + '.years.' + y, a.years[y], y === YEARS[4] ? 'Where I want to be' : 'Milestone') + '</div>';
+      });
+    });
+    h += '</div><button class="add" data-act="area-add">+ Add an area</button>';
+    return h;
+  }
+
+  function thisYear() {
+    var inYear = today >= Y0 && today < Y1;
+    var curM = inYear ? today.getMonth() : -1;
+    var h = '<p class="intro">' + (today < Y0 ? Math.ceil((Y0 - today) / 864e5) + ' days until ' + START + '. ' : '') +
+      'Each goal has a start and a deadline. Tap a goal to change it.</p>';
+    h += '<div class="months">' + MONTHS.map(function (m, i) { return '<span class="' + (i === curM ? 'cur' : '') + '">' + m + '</span>'; }).join('') + '</div>';
+
+    state.areas.forEach(function (a) {
+      var goals = state.goals.filter(function (g) { return g.area === a.id; })
+        .sort(function (x, y) { return x.due < y.due ? -1 : 1; });
+      h += '<div class="group"><div class="group-head"><span class="name">' + esc(a.name || 'Untitled') + '</span>' +
+        (a.years[START] ? '<span class="yeargoal"><b>BY DEC 31</b>' + esc(a.years[START]) + '</span>' : '') + '</div>';
+      goals.forEach(function (g) { h += goalRow(g, inYear); });
+      h += '<button class="add" data-act="goal-add" data-area="' + a.id + '">+ Goal</button></div>';
+    });
+    return h;
+  }
+
+  function goalRow(g, inYear) {
+    var d = daysTo(g.due), late = !g.done && d < 0;
+    var dueTxt = g.done ? 'done' : (late ? Math.abs(d) + ' days late' : 'due ' + short(g.due) + (d <= 60 ? ' · ' + d + ' days' : ''));
+    var left = frac(parse(g.start)) * 100, right = frac(new Date(parse(g.due).getTime() + 864e5)) * 100;
+    var h = '<div class="row' + (g.done ? ' done' : '') + (late ? ' late' : '') + '" data-id="' + g.id + '">' +
+      '<div class="row-top"><button class="check' + (g.done ? ' on' : '') + '" data-act="toggle" aria-label="Done">' + (g.done ? '✓' : '') + '</button>' +
+      '<span class="row-title" data-act="open">' + esc(g.title || 'Untitled goal') + '</span>' +
+      '<span class="due' + (late ? ' late' : (!g.done && d <= 30 ? ' soon' : '')) + '">' + dueTxt + '</span></div>' +
+      '<div class="track"><div class="bar" style="left:' + left + '%;width:' + Math.max(0, right - left) + '%"></div>' +
+      (inYear ? '<div class="today" style="left:' + (frac(today) * 100) + '%"></div>' : '') + '</div>';
+    if (openId === g.id) {
+      h += '<div class="editor"><div class="full"><label>Goal</label><input type="text" id="f-title" value="' + esc(g.title) + '" placeholder="What will be done"></div>' +
+        '<div><label>Start</label><input type="date" id="f-start" value="' + g.start + '" min="' + START + '-01-01" max="' + START + '-12-31"></div>' +
+        '<div><label>Deadline</label><input type="date" id="f-due" value="' + g.due + '" min="' + START + '-01-01" max="' + START + '-12-31"></div>' +
+        '<div class="full"><label>Area</label><select id="f-area">' + state.areas.map(function (a) {
+          return '<option value="' + a.id + '"' + (a.id === g.area ? ' selected' : '') + '>' + esc(a.name) + '</option>'; }).join('') + '</select></div>' +
+        '<div class="actions"><button class="btn del" data-act="del">Delete</button><span class="sp"></span>' +
+        '<button class="btn ghost" data-act="close">Cancel</button><button class="btn" data-act="save">Save</button></div></div>';
+    }
+    return h + '</div>';
+  }
+
+  /* ── events ── */
+  function setPath(path, v) {
+    var p = path.split('.'), o = state;
+    for (var i = 0; i < p.length - 1; i++) o = o[p[i]] = o[p[i]] || {};
+    o[p[p.length - 1]] = v;
+  }
+  function changed() { state.isDraft = false; save(); }
+
   document.addEventListener('input', function (e) {
-    var p = e.target.dataset.path; if (!p) return;
-    var parts = p.split('.'), o = state;
-    for (var i = 0; i < parts.length - 1; i++) o = o[parts[i]];
-    o[parts[parts.length - 1]] = e.target.textContent.trim();
-    save();
+    if (e.target.dataset.path) { setPath(e.target.dataset.path, e.target.textContent.trim()); changed(); }
   });
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter' && e.target.isContentEditable) { e.preventDefault(); e.target.blur(); }
+    if (e.key !== 'Enter') return;
+    if (e.target.isContentEditable) { e.preventDefault(); e.target.blur(); }
+    else if (e.target.closest('.editor')) { var s = document.querySelector('[data-act="save"]'); if (s) s.click(); }
   });
   document.addEventListener('paste', function (e) {
     if (!e.target.isContentEditable) return;
@@ -104,16 +280,56 @@
     document.execCommand('insertText', false, e.clipboardData.getData('text').replace(/\s+/g, ' '));
   });
 
-  // Ticking a step counts it and clears the line for the next one.
   document.addEventListener('click', function (e) {
-    var b = e.target.closest('[data-done]'); if (!b) return;
-    var g = state.goals[+b.dataset.done];
-    if (!g.step) return;
-    g.taken = (g.taken || 0) + 1;
-    g.step = '';
-    save(); render();
-    document.querySelector('[data-path="goals.' + b.dataset.done + '.step"]').focus();
+    var v = e.target.closest('[data-view]');
+    if (v) { state.view = v.dataset.view; openId = null; save(); render(); return; }
+    var el = e.target.closest('[data-act]'); if (!el) return;
+    var row = el.closest('.row'), g = row && state.goals.find(function (x) { return x.id === row.dataset.id; });
+
+    switch (el.dataset.act) {
+      case 'toggle': g.done = !g.done; break;
+      case 'open': openId = openId === g.id ? null : g.id; render(); focusTitle(); return;
+      case 'close':
+        if (!g.title) state.goals = state.goals.filter(function (x) { return x !== g; });
+        openId = null; break;
+      case 'save': {
+        var t = document.getElementById('f-title').value.trim();
+        var s = document.getElementById('f-start').value, d = document.getElementById('f-due').value;
+        if (t) g.title = t;
+        if (s) g.start = s;
+        if (d) g.due = d;
+        if (g.start > g.due) { var tmp = g.start; g.start = g.due; g.due = tmp; }
+        g.area = document.getElementById('f-area').value;
+        openId = null; break;
+      }
+      case 'del': state.goals = state.goals.filter(function (x) { return x !== g; }); openId = null; break;
+      case 'goal-add': {
+        var start = today >= Y0 && today < Y1 ? iso(today) : START + '-01-01';
+        var due = iso(new Date(Math.min(parse(start).getTime() + 90 * 864e5, new Date(START, 11, 31).getTime())));
+        var n = { id: uid(), area: el.dataset.area, title: '', start: start, due: due, done: false };
+        state.goals.push(n); openId = n.id; changed(); render(); focusTitle(); return;
+      }
+      case 'area-add':
+        state.areas.push({ id: uid(), name: '', years: {} }); changed(); render();
+        var names = document.querySelectorAll('.five .name'); if (names.length) names[names.length - 1].focus();
+        return;
+      case 'area-del': {
+        var a = state.areas[+el.dataset.i];
+        var n2 = state.goals.filter(function (x) { return x.area === a.id; }).length;
+        if (!confirm('Remove “' + (a.name || 'this area') + '”' + (n2 ? ' and its ' + n2 + ' goal' + (n2 === 1 ? '' : 's') : '') + '?')) return;
+        state.areas.splice(+el.dataset.i, 1);
+        state.goals = state.goals.filter(function (x) { return x.area !== a.id; });
+        break;
+      }
+      case 'blank':
+        if (!confirm('Clear the draft and start blank?')) return;
+        state = { v: 1, isDraft: false, view: state.view, areas: [{ id: uid(), name: '', years: {} }], goals: [] };
+        break;
+      default: return;
+    }
+    changed(); render();
   });
+  function focusTitle() { var f = document.getElementById('f-title'); if (f) f.focus(); }
 
   render();
   if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(function () {});

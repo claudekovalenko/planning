@@ -1,7 +1,7 @@
 {
-  "name": "2027 — where God is leading",
-  "short_name": "2027",
-  "description": "A year plan for 2027, moving toward the direction God is leading."
+  "name": "Five-Year Plan",
+  "short_name": "5-Year Plan",
+  "description": "A five-year plan with dated goals for 2027 on a timeline.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
