@@ -61,7 +61,22 @@
   .five > .area .name { font-size: 1rem; }
   .five > .cell.end { background: rgba(201, 162, 94, 0.07); }
   .five > .cell.now { background: rgba(255, 255, 255, 0.02); }
-  .five.long { grid-template-columns: 11rem 1fr 1.2fr 1.2fr; }
+  .five.long { grid-template-columns: 10rem repeat(5, 1fr); }
+  .tl { position: relative; margin-top: 1.5rem; padding-left: 1.6rem; }
+  .tl::before { content: ''; position: absolute; left: 0.45rem; top: 0.6rem; bottom: 0.5rem; width: 2px; background: linear-gradient(var(--gold), var(--line)); }
+  .node { position: relative; }
+  .node::before { content: ''; position: absolute; left: -1.5rem; top: 0.45rem; width: 12px; height: 12px; border-radius: 50%; background: var(--bg); border: 2px solid var(--gold); }
+  .node.now::before { background: var(--gold); box-shadow: 0 0 0 5px var(--gold-soft); }
+  .when { display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.35rem; }
+  .when b { font-weight: normal; font-size: 1.35rem; color: var(--gold); }
+  .when span { font-family: var(--sans); font-size: 0.75rem; color: var(--muted); }
+  .it { display: flex; gap: 0.6rem; align-items: flex-start; padding: 0.3rem 0; }
+  .it .dot { flex: none; width: 8px; height: 8px; border-radius: 50%; margin-top: 0.55rem; }
+  .it .body { flex: 1; min-width: 0; display: grid; grid-template-columns: 9rem 1fr; gap: 0.6rem; }
+  .it .an { font-family: var(--sans); font-size: 0.75rem; color: var(--muted); padding-top: 0.2rem; }
+  .it .an select { background: none; border: none; padding: 0; font-size: 0.75rem; color: var(--muted); max-width: 100%; }
+  .small { font-size: 0.86rem; }
+  @media (max-width: 560px) { .it .body { grid-template-columns: 1fr; gap: 0; } }
   .five .yr { display: none; }
   .five .x { float: right; }
 
@@ -136,13 +151,14 @@
   'use strict';
 
   var KEY = 'planning.five.v1';
-  var START = 2027, YEARS = [2027, 2028, 2029, 2030, 2031], MID = 2036, FAR = 2046;
+  var START = 2027, YEARS = [2027, 2028, 2029, 2030, 2031], MID = 2036, FAR = 2046, FORTY = 2066, FIFTY = 2076;
+  var THIS_YEAR = new Date().getFullYear();
   var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
 
-  var OLD_DIRECTIONS = ['Growing in preaching, and from there into disciple-making: messages that hand people a next step, and a pathway that carries them from reached to sent.'];
-  var DIRECTION = 'Rooted in a church I grow deeply with; from there, growing in preaching, and from preaching into disciple-making.';
+  var OLD_DIRECTIONS = ['Growing in preaching, and from there into disciple-making: messages that hand people a next step, and a pathway that carries them from reached to sent.', 'Rooted in a church I grow deeply with; from there, growing in preaching, and from preaching into disciple-making.'];
+  var DIRECTION = 'Rooted in a church I grow deeply with; from there, growing my own teaching ministry, and from teaching into disciple-making.';
   var CHURCH = { id: 'church', name: 'Church home', years: {
     2027: 'Found the right church, committed to it, and started serving',
     2028: 'Known there: in a group, with people who know me well',
@@ -157,42 +173,77 @@
       { title: 'Meet with a pastor there; share where I sense God leading', start: '2027-04-01', due: '2027-06-30' }
     ].map(function (g) { return { id: uid(), area: 'church', title: g.title, start: g.start, due: g.due, done: false }; });
   }
-  var PREACHING = { id: 'preaching', name: 'Preaching', years: {
-    2027: 'Preaching regularly: 12 messages, honest feedback on each, every one ending in a next step',
-    2028: 'A trusted voice in my church; a teaching series that moves people into discipleship',
-    2029: 'Preaching that feeds the pathway: people step from the message into a group',
-    2030: 'Training others to open and teach the Word',
-    2031: 'Opening the Word with clarity and power, every message leading people into real discipleship' } };
+  var PREACHING = { id: 'preaching', name: 'My teaching ministry', years: {
+    2027: 'Preaching 12 times with honest feedback, and teaching every week on the podcast or Instagram',
+    2028: 'A teaching ministry people follow: a steady podcast, a growing audience, invitations to speak',
+    2029: 'Teaching that feeds the pathway: people step from a message into a group',
+    2030: 'Speaking beyond my church; training others to open and teach the Word',
+    2031: 'My own teaching ministry: opening the Word with clarity and power, every message leading into real discipleship' } };
+  // Earlier draft wording, replaced only where it was never edited.
+  var OLD_PREACHING = {"2027": "Preaching regularly: 12 messages, honest feedback on each, every one ending in a next step", "2028": "A trusted voice in my church; a teaching series that moves people into discipleship", "2029": "Preaching that feeds the pathway: people step from the message into a group", "2030": "Training others to open and teach the Word", "2031": "Opening the Word with clarity and power, every message leading people into real discipleship", "2036": "Preaching that moves people into discipleship, in my church and beyond", "2046": "Training the next generation of preachers"};
   var DISCIPLES = { 2027: 'Pathway written on one page; 2 men walking through stage one',
     2028: 'A discipleship cycle running on campus; the first leaders emerging',
     2029: 'Disciples making disciples: leaders I raised up discipling others',
     2030: 'Several groups led by people I raised up',
     2031: 'Disciples on campus who make disciples, with leaders sent out to the ends of the earth' };
+  function teachingGoals() {
+    return [
+      { title: 'Set the podcast\u2019s format and publish weekly', start: '2027-01-04', due: '2027-03-31' },
+      { title: 'Post a short teaching on Instagram every week', start: '2027-02-01', due: '2027-12-31' }
+    ];
+  }
   function preachingGoals() {
     return [
       { title: 'Write and preach a 10-minute message; get a mentor’s critique', start: '2027-01-04', due: '2027-02-15' },
       { title: 'Preach or teach 6 times, with honest feedback on each', start: '2027-02-16', due: '2027-06-30' },
       { title: 'Preach or teach 6 more, each ending in a step into discipleship', start: '2027-07-01', due: '2027-12-15' }
-    ].map(function (g) { return { id: uid(), area: 'preaching', title: g.title, start: g.start, due: g.due, done: false }; });
+    ].concat(teachingGoals()).map(function (g) { return { id: uid(), area: 'preaching', title: g.title, start: g.start, due: g.due, done: false }; });
   }
 
-  var LONG_DIRECTION = 'A father in the faith: rooted in one church family, preaching that makes disciples, and generations of leaders sent out to the ends of the earth \u2014 with a full house of children who follow Jesus.';
+  var OLD_LONG_DIRECTION = 'A father in the faith: rooted in one church family, preaching that makes disciples, and generations of leaders sent out to the ends of the earth \u2014 with a full house of children who follow Jesus.';
+  var LONG_DIRECTION = 'A father in the faith: rooted in one church family, a teaching ministry that makes disciples, generations of leaders sent out, a full house of children who follow Jesus \u2014 and finishing well.';
   var LONG = {
     church:    { 2036: 'A pillar in my church family, helping lead it', 2046: 'A father in the faith to a church family I\u2019ve grown with for decades' },
-    preaching: { 2036: 'Preaching that moves people into discipleship, in my church and beyond', 2046: 'Training the next generation of preachers' },
+    preaching: { 2036: 'A teaching ministry reaching campuses and churches, moving people into discipleship', 2046: 'Training the next generation of preachers and teachers' },
     ministry:  { 2036: 'A multiplying movement on campuses: disciples, leaders, and leaders of leaders', 2046: 'Generations of disciples, with leaders sent out to the ends of the earth' },
     god:       { 2036: 'A life of prayer and the Word that others can lean on', 2046: 'Still remaining in Jesus, more like him every year' },
     marriage:  { 2036: 'A growing marriage and a full house, on the way to 4\u20137 kids', 2046: '4 to 7 children who follow Jesus, in a culture so strong they could almost grow up unsupervised' },
     health:    { 2036: 'Still strong and training; energy for a full house and a full calling', 2046: 'Healthy and strong enough to keep serving for decades more' },
     provision: { 2036: 'Income I don\u2019t trade time for covering much of what the family spends', 2046: 'Free: time fully given to the calling, and generous beyond the tithe' }
   };
+  var LONG2 = {
+    church: { 2066: 'An elder and spiritual father to a church family, generations deep', 2076: 'Finished faithful in the church family I gave my life to' },
+    preaching: { 2066: 'Preachers and teachers I trained, now teaching others', 2076: 'Still opening the Word for whoever will listen' },
+    ministry: { 2066: 'Disciples of my disciples\u2019 disciples, on campuses and in the nations', 2076: 'A legacy of faithful people, many I will only meet in eternity' },
+    god: { 2066: 'Seasoned in prayer; known as someone who walks with God', 2076: 'Finishing well: \u201cWell done, good and faithful servant\u201d' },
+    marriage: { 2066: 'Decades of a good marriage; grandchildren who know the Lord', 2076: 'A family line that follows Jesus for generations' },
+    health: { 2066: 'Active and able, serving with energy in my seventies', 2076: 'Still moving and serving, as long as God gives breath' },
+    provision: { 2066: 'Free and generous: resources given to the work', 2076: 'An inheritance for my children\u2019s children (Prov 13:22)' }
+  };
   function addLong(st) {
     st.areas.forEach(function (a) {
       var l = LONG[a.id]; if (!l) return;
+      var l2 = LONG2[a.id] || {};
       [2036, 2046].forEach(function (y) { if (!a.years[y]) a.years[y] = l[y]; });
+      [2066, 2076].forEach(function (y) { if (!a.years[y] && l2[y]) a.years[y] = l2[y]; });
       if (a.id === 'marriage' && (!a.years[2031] || a.years[2031] === 'Married, leading a home with a strong, good culture')) a.years[2031] = 'Married, with our first children; leading a home with a strong, good culture';
     });
-    if (!st.longDirection) st.longDirection = LONG_DIRECTION;
+    if (!st.longDirection || st.longDirection === OLD_LONG_DIRECTION) st.longDirection = LONG_DIRECTION;
+    if (!Array.isArray(st.now)) st.now = nowDraft();
+  }
+
+  // What is going on right now, from the Current tier of Building & Blessing.
+  function nowDraft() {
+    return [
+      ['church', 'Discerning which church I\u2019m planted in'],
+      ['preaching', 'Seminary: learning, not just grades'],
+      ['preaching', 'The podcast'],
+      ['ministry', 'The ministry at Cypress'],
+      ['ministry', 'Updating the E3 systems for SoCal'],
+      ['provision', 'Support raising, AI work, house flipping'],
+      ['provision', 'The social media app with Craig'],
+      ['health', 'Training at PF']
+    ].map(function (x) { return { id: uid(), area: x[0], text: x[1] }; });
   }
 
   /* Starting draft, drawn from the Vision app. The order is the direction:
@@ -200,7 +251,7 @@
   function draft() {
     function g(area, title, start, due) { return { id: uid(), area: area, title: title, start: start, due: due, done: false }; }
     return {
-      v: 4, isDraft: true, view: 'five', direction: DIRECTION,
+      v: 6, isDraft: true, view: 'five', direction: DIRECTION,
       areas: [
         JSON.parse(JSON.stringify(CHURCH)),
         JSON.parse(JSON.stringify(PREACHING)),
@@ -234,7 +285,7 @@
 
   var state;
   try { state = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
-  if (!state || !Array.isArray(state.areas) || (state.isDraft && state.v !== 4)) state = draft();
+  if (!state || !Array.isArray(state.areas) || (state.isDraft && state.v !== 6)) state = draft();
   if (state.isDraft && !state.longDirection) addLong(state);
   // A plan already edited under v1: add preaching ahead of disciple-making, keep everything written.
   if (state.v === 1) {
@@ -270,6 +321,29 @@
   if (state.v === 3) {
     addLong(state);
     state.v = 4;
+  }
+  // v4 -> v5: preaching grows into my own teaching ministry. Edited words stay.
+  if (state.v === 4) {
+    var pr = state.areas.find(function (a) { return a.id === 'preaching'; });
+    if (pr) {
+      if (pr.name === 'Preaching') pr.name = PREACHING.name;
+      var fresh = Object.assign({}, PREACHING.years, LONG.preaching);
+      Object.keys(fresh).forEach(function (y) {
+        if (!pr.years[y] || pr.years[y] === OLD_PREACHING[y]) pr.years[y] = fresh[y];
+      });
+      teachingGoals().forEach(function (t) {
+        state.goals = state.goals || [];
+        if (!state.goals.some(function (g) { return g.title === t.title; }))
+          state.goals.push({ id: uid(), area: 'preaching', title: t.title, start: t.start, due: t.due, done: false });
+      });
+    }
+    if (!state.direction || OLD_DIRECTIONS.indexOf(state.direction) > -1) state.direction = DIRECTION;
+    state.v = 5;
+  }
+  // v5 -> v6: the 40- and 50-year horizon, and what is happening now.
+  if (state.v === 5) {
+    addLong(state);
+    state.v = 6;
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
   }
   state.goals = state.goals || [];
@@ -297,20 +371,21 @@
   /* ── views ── */
   function render() {
     var titles = {
-      long: 'The long view \u00b7 ' + YEARS[4] + '\u2013' + FAR + (state.born ? ' <span class="age">\u00b7 ages ' + age(YEARS[4]) + '\u2013' + age(FAR) + '</span>' : ''),
+      long: 'The long view \u00b7 ' + YEARS[4] + '\u2013' + FIFTY + (state.born ? ' <span class="age">\u00b7 ages ' + age(YEARS[4]) + '\u2013' + age(FIFTY) + '</span>' : ''),
+      timeline: 'Over time \u00b7 ' + THIS_YEAR + '\u2013' + FIFTY + (state.born ? ' <span class="age">\u00b7 ages ' + age(THIS_YEAR) + '\u2013' + age(FIFTY) + '</span>' : ''),
       five: 'Five years \u00b7 ' + START + '\u2013' + YEARS[4] + (state.born ? ' <span class="age">\u00b7 ages ' + age(START) + '\u2013' + age(YEARS[4]) + '</span>' : ''),
       year: START + ageTag(START, '\u00b7 turning ')
     };
     var h = '<header><h1>' + titles[state.view] + '</h1><div class="switch">' +
-      [['five', '5 years'], ['long', '20 years'], ['year', String(START)]].map(function (v) {
+      [['five', '5 years'], ['timeline', 'Timeline'], ['long', '50 years'], ['year', String(START)]].map(function (v) {
         return '<button data-view="' + v[0] + '" class="' + (state.view === v[0] ? 'on' : '') + '">' + v[1] + '</button>';
       }).join('') + '</div></header>';
-    h += state.view === 'long'
-      ? '<div class="direction"><span class="label">Where it is all heading</span>' + ed('longDirection', state.longDirection, 'In 10 to 20 years, I sense God leading me toward\u2026', 'text') + '</div>'
+    h += state.view === 'long' || state.view === 'timeline'
+      ? '<div class="direction"><span class="label">Where it is all heading</span>' + ed('longDirection', state.longDirection, 'Over my lifetime, I sense God leading me toward\u2026', 'text') + '</div>'
       : '<div class="direction"><span class="label">The direction</span>' + ed('direction', state.direction, 'Where I sense God leading over these five years', 'text') + '</div>';
     h += '<label class="born">Born in <input type="number" inputmode="numeric" id="born" min="1930" max="2026" placeholder="year" value="' + (state.born || '') + '">' +
       (state.born ? '<span>' + age(new Date().getFullYear()) + ' this year</span>' : '<span>to see your age beside each year</span>') + '</label>';
-    h += state.view === 'long' ? longView() : state.view === 'five' ? fiveYears() : thisYear();
+    h += ({ long: longView, timeline: timelineView, five: fiveYears, year: thisYear }[state.view] || fiveYears)();
     if (state.isDraft) h += '<p class="draft">A starting draft from your Vision. Tap any text to rewrite it. <button data-act="blank">Start blank</button></p>';
     h += '<div class="foot">“The heart of man plans his way, but the LORD establishes his steps.”<span>PROVERBS 16:9</span></div>';
     document.getElementById('app').innerHTML = h;
@@ -333,21 +408,54 @@
     return h;
   }
 
+  var HORIZON = {}; HORIZON[YEARS[4]] = '5 years'; HORIZON[MID] = '10 years'; HORIZON[FAR] = '20 years'; HORIZON[FORTY] = '40 years'; HORIZON[FIFTY] = '50 years';
+
   function longView() {
-    var cols = [YEARS[4], MID, FAR];
-    var h = '<p class="intro">Where each area is heading in 10 and 20 years. The five-year goal is the first step toward it.</p>';
+    var cols = [YEARS[4], MID, FAR, FORTY, FIFTY];
+    var h = '<p class="intro">Where each area is heading over a lifetime. The five-year goal is the first step toward it.</p>';
     h += '<div class="five long"><div class="hd">Area</div>' + cols.map(function (y) {
-      return '<div class="hd' + (y === FAR ? ' goal' : '') + '">By ' + y + (y === YEARS[4] ? ' \u2014 5 years' : y === MID ? ' \u2014 10 years' : ' \u2014 20 years') + ageTag(y) + '</div>';
+      return '<div class="hd' + (y === FIFTY ? ' goal' : '') + '">By ' + y + ' \u2014 ' + HORIZON[y] + ageTag(y) + '</div>';
     }).join('');
     state.areas.forEach(function (a, i) {
       h += '<div class="area"><button class="x" data-act="area-del" data-i="' + i + '" title="Remove area">\u00d7</button>' + ed('areas.' + i + '.name', a.name, 'Area', 'name') + '</div>';
       cols.forEach(function (y) {
-        h += '<div class="cell' + (y === FAR ? ' end' : '') + '"><span class="yr">By ' + y + ageTag(y, 'age ') + '</span>' +
-          ed('areas.' + i + '.years.' + y, a.years[y], y === YEARS[4] ? 'Five-year goal' : y === MID ? 'In 10 years' : 'In 20 years') + '</div>';
+        h += '<div class="cell' + (y === FIFTY ? ' end' : '') + '"><span class="yr">By ' + y + ageTag(y, 'age ') + '</span>' +
+          ed('areas.' + i + '.years.' + y, a.years[y], 'In ' + HORIZON[y]) + '</div>';
       });
     });
     h += '</div><button class="add" data-act="area-add">+ Add an area</button>';
     return h;
+  }
+
+  var COLORS = ['#c9a25e', '#7fa8c9', '#8fbf8f', '#c98a9a', '#b7a6d9', '#c97f5e', '#9fc7c0', '#d6c27a'];
+  function colorOf(id) { var i = state.areas.findIndex(function (a) { return a.id === id; }); return i < 0 ? 'var(--muted)' : COLORS[i % COLORS.length]; }
+
+  // One line down through life: what is happening now, then each horizon.
+  function timelineView() {
+    var stops = [[START, START === THIS_YEAR + 1 ? 'next year' : START === THIS_YEAR ? 'this year' : String(START)], [YEARS[4], '5 years'], [MID, '10 years'], [FAR, '20 years'], [FORTY, '40 years'], [FIFTY, '50 years']];
+    var h = '<p class="intro">What is happening now, and where it is all going over time. Tap any line to change it.</p><div class="tl">';
+    h += '<div class="node now"><div class="when"><b>Now</b><span>' + THIS_YEAR + (age(THIS_YEAR) != null ? ' \u00b7 age ' + age(THIS_YEAR) : '') + '</span></div>';
+    (state.now || []).forEach(function (n) {
+      h += '<div class="it" data-now="' + n.id + '"><i class="dot" style="background:' + colorOf(n.area) + '"></i>' +
+        '<div class="body"><span class="an"><select data-now-area="1" aria-label="Area"><option value="">\u2014</option>' + state.areas.map(function (a) {
+          return '<option value="' + a.id + '"' + (a.id === n.area ? ' selected' : '') + '>' + esc(a.name || 'Untitled') + '</option>'; }).join('') + '</select></span>' +
+        '<div contenteditable="true" data-now-text="1" data-ph="Something happening now">' + esc(n.text) + '</div></div>' +
+        '<button class="x" data-act="now-del" title="Remove">\u00d7</button></div>';
+    });
+    h += '<button class="add" data-act="now-add">+ Something happening now</button></div>';
+    var prev = THIS_YEAR;
+    stops.forEach(function (st) {
+      var y = st[0], gap = Math.min(220, Math.max(24, (y - prev) * 9));
+      prev = y;
+      var items = state.areas.map(function (a, i) {
+        if (!a.years[y]) return '';
+        return '<div class="it"><i class="dot" style="background:' + COLORS[i % COLORS.length] + '"></i><div class="body"><span class="an">' + esc(a.name || 'Untitled') + '</span>' +
+          ed('areas.' + i + '.years.' + y, a.years[y], '') + '</div></div>';
+      }).join('');
+      h += '<div class="node" style="margin-top:' + gap + 'px"><div class="when"><b>' + y + '</b><span>' + st[1] + (age(y) != null ? ' \u00b7 age ' + age(y) : '') + '</span></div>' +
+        (items || '<div class="muted small">Nothing written for ' + y + ' yet.</div>') + '</div>';
+    });
+    return h + '</div>';
   }
 
   function thisYear() {
@@ -399,6 +507,7 @@
   function changed() { state.isDraft = false; save(); }
 
   document.addEventListener('change', function (e) {
+    if (e.target.dataset.nowArea) { nowItem(e.target).area = e.target.value; changed(); render(); return; }
     if (e.target.id !== 'born') return;
     var v = parseInt(e.target.value, 10);
     state.born = v >= 1930 && v <= 2026 ? v : null;
@@ -406,7 +515,9 @@
   });
   document.addEventListener('input', function (e) {
     if (e.target.dataset.path) { setPath(e.target.dataset.path, e.target.textContent.trim()); changed(); }
+    else if (e.target.dataset.nowText) { nowItem(e.target).text = e.target.textContent.trim(); changed(); }
   });
+  function nowItem(el) { var id = el.closest('[data-now]').dataset.now; return state.now.find(function (n) { return n.id === id; }); }
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Enter') return;
     if (e.target.isContentEditable) { e.preventDefault(); e.target.blur(); }
@@ -447,6 +558,13 @@
         var n = { id: uid(), area: el.dataset.area, title: '', start: start, due: due, done: false };
         state.goals.push(n); openId = n.id; changed(); render(); focusTitle(); return;
       }
+      case 'now-del': { var nid = el.closest('[data-now]').dataset.now; state.now = state.now.filter(function (n) { return n.id !== nid; }); break; }
+      case 'now-add': {
+        var item = { id: uid(), area: '', text: '' };
+        (state.now = state.now || []).push(item); changed(); render();
+        var t = document.querySelector('[data-now="' + item.id + '"] [data-now-text]'); if (t) t.focus();
+        return;
+      }
       case 'area-add':
         state.areas.push({ id: uid(), name: '', years: {} }); changed(); render();
         var names = document.querySelectorAll('.five .name'); if (names.length) names[names.length - 1].focus();
@@ -461,7 +579,7 @@
       }
       case 'blank':
         if (!confirm('Clear the draft and start blank?')) return;
-        state = { v: 4, isDraft: false, longDirection: '', born: state.born || null, view: state.view, direction: '', areas: [{ id: uid(), name: '', years: {} }], goals: [] };
+        state = { v: 6, isDraft: false, longDirection: '', now: [], born: state.born || null, view: state.view, direction: '', areas: [{ id: uid(), name: '', years: {} }], goals: [] };
         break;
       default: return;
     }

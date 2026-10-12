@@ -1,14 +1,17 @@
 # Five-Year Plan
 
-Three views. It opens on the five-year plan:
+Four views. It opens on the five-year plan:
 
 - **5 years:** the direction for the five years, then a few areas of life — Church home
   first, then Preaching, then Disciple-making growing out of it, then Walk with God, Marriage & family,
   Health, Provision. For each area: where I want to be by 2031, and a milestone
   for the end of each year from 2027 to 2030. Tap any cell to write in it.
   Enter your birth year and each year shows the age you will be.
-- **20 years:** where it is all heading, then each area's five-year goal (2031),
-  where it is in 10 years (2036) and in 20 years (2046), with ages.
+- **Timeline:** one line down through life. It starts with what is happening
+  now, then 2027, and 5, 10, 20, 40 and 50 years out, with ages; the gaps
+  grow with the years.
+- **50 years:** where it is all heading, then each area by 2031, 2036, 2046,
+  2066 and 2076, with ages.
 - **2027:** the dated goals for this year, grouped by area under that area's
   2027 milestone. Each goal is a bar across Jan–Dec from its start date to its
   deadline, with days left, overdue goals shown in red, and a line marking today.
