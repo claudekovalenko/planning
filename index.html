@@ -14,486 +14,109 @@
   :root {
     --bg: #0f1115;
     --panel: #181b22;
-    --panel-2: #1e222b;
     --ink: #e8e6e1;
     --muted: #9a978f;
     --gold: #c9a25e;
     --gold-soft: rgba(201, 162, 94, 0.15);
     --line: #2a2e38;
-    --green: #8fbf8f;
-    --rust: #b06557;
-    --ember: #c97f5e;
     --sans: 'Helvetica Neue', Arial, sans-serif;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
   body {
     background: var(--bg); color: var(--ink);
-    font-family: Georgia, 'Times New Roman', serif; line-height: 1.55; min-height: 100vh;
-    padding-bottom: calc(72px + env(safe-area-inset-bottom));
+    font-family: Georgia, 'Times New Roman', serif; line-height: 1.5; min-height: 100vh;
   }
-  .wrap { max-width: 760px; margin: 0 auto; padding: 1.5rem 16px 2rem; }
-  button, input, select, textarea { font: inherit; color: inherit; }
-  button { cursor: pointer; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 3rem 16px 4rem; }
+  .label { font-family: var(--sans); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
 
-  .label { font-family: var(--sans); font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
-  .muted { color: var(--muted); }
-  .small { font-size: 0.86rem; }
-  h1 { font-weight: normal; font-size: 1.7rem; }
-  h2 { font-weight: normal; font-size: 1.15rem; margin: 2rem 0 0.6rem; display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
-  h2 .label { margin-left: auto; }
-  .head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; }
-  .card + .card { margin-top: 0.7rem; }
-
-  /* Editable text: tap and type */
   [contenteditable] { outline: none; border-radius: 4px; cursor: text; }
   [contenteditable]:focus { background: var(--gold-soft); box-shadow: 0 0 0 4px var(--gold-soft); }
   [contenteditable]:empty::before { content: attr(data-ph); color: var(--muted); font-style: italic; }
 
-  /* Direction */
-  .year-num { font-size: 3.2rem; line-height: 1; color: var(--gold); letter-spacing: 0.02em; }
-  .direction { border-left: 2px solid var(--gold); padding: 0.2rem 0 0.2rem 1rem; margin-top: 1.25rem; }
-  .direction .text { font-size: 1.15rem; font-style: italic; margin-top: 0.35rem; }
-  .verse { margin-top: 1rem; color: var(--gold); font-style: italic; }
-  .verse-ref { font-family: var(--sans); font-size: 0.75rem; color: var(--muted); letter-spacing: 0.1em; margin-top: 0.2rem; }
-  .vision-line { margin-top: 1.25rem; font-size: 0.86rem; color: var(--muted); }
-  .vision-line b { font-weight: normal; color: var(--ink); }
+  .year { font-size: 3.5rem; line-height: 1; color: var(--gold); }
+  .lead { margin-top: 2rem; }
+  .lead .text { font-size: 1.3rem; font-style: italic; margin-top: 0.4rem; }
 
-  .draft { border: 1px dashed var(--ember); border-radius: 10px; padding: 0.75rem 1rem; margin-top: 1.25rem; font-size: 0.9rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
-  .draft span { flex: 1 1 260px; }
+  .goal { margin-top: 2.25rem; }
+  .goal .num { color: var(--gold); font-family: var(--sans); font-size: 0.8rem; }
+  .goal .text { font-size: 1.2rem; margin-top: 0.15rem; }
+  .step { display: flex; gap: 0.75rem; align-items: flex-start; margin-top: 0.75rem; padding: 0.75rem 0.9rem; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; }
+  .step .text { flex: 1; min-width: 0; }
+  .check { flex: none; width: 24px; height: 24px; border: 1.5px solid var(--muted); border-radius: 50%; background: none; cursor: pointer; }
+  .check:hover { border-color: var(--gold); }
+  .taken { margin-top: 0.4rem; font-family: var(--sans); font-size: 0.75rem; color: var(--muted); }
 
-  /* Areas: from -> to */
-  .area-head { display: flex; align-items: baseline; gap: 0.6rem; }
-  .area-title { font-size: 1.1rem; flex: 1; }
-  .ties { font-family: var(--sans); font-size: 0.72rem; color: var(--muted); margin-top: 0.1rem; }
-  .fromto { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.75rem; margin-top: 0.75rem; align-items: start; }
-  .fromto .arrow { color: var(--gold); padding-top: 1.1rem; }
-  .fromto .col .label { display: block; margin-bottom: 0.2rem; letter-spacing: 0.14em; }
-  .fromto .to .label { color: var(--gold); }
-  .fromto .val { font-size: 0.95rem; }
-  .why { margin-top: 0.75rem; font-size: 0.88rem; color: var(--muted); }
-  .why .label { margin-right: 0.4rem; }
-  .why [contenteditable] { color: var(--ink); }
-  .trail { display: flex; gap: 3px; margin-top: 0.9rem; align-items: center; }
-  .trail i { flex: 1; height: 6px; border-radius: 2px; background: var(--panel-2); }
-  .trail i.t { background: var(--green); } .trail i.s { background: #6d6a62; } .trail i.d { background: var(--rust); }
-  .trail .q { font-family: var(--sans); font-size: 0.7rem; color: var(--muted); margin-left: 0.6rem; white-space: nowrap; }
-
-  /* Quarters */
-  .qtabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.4rem; margin-top: 1rem; }
-  .qtabs button { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 0.55rem 0.25rem; font-family: var(--sans); font-size: 0.8rem; }
-  .qtabs button.on { border-color: var(--gold); color: var(--gold); }
-  .qtabs button small { display: block; color: var(--muted); font-size: 0.68rem; margin-top: 0.1rem; }
-  .qfocus { margin-top: 1rem; }
-  .qfocus .text { font-style: italic; margin-top: 0.3rem; }
-  ul.ms { list-style: none; margin-top: 0.5rem; }
-  ul.ms li { display: flex; gap: 0.6rem; align-items: flex-start; padding: 0.45rem 0; border-top: 1px solid var(--line); }
-  ul.ms li:first-child { border-top: none; }
-  ul.ms li .t { flex: 1; min-width: 0; overflow-wrap: anywhere; }
-  ul.ms li.done .t { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
-  ul.ms select { padding: 0.1rem 0.3rem; font-size: 12px; }
-  .check { flex: none; width: 22px; height: 22px; margin-top: 1px; border: 1.5px solid var(--muted); border-radius: 50%; background: none; display: grid; place-items: center; font-size: 13px; line-height: 1; color: var(--bg); }
-  .check.on { background: var(--gold); border-color: var(--gold); }
-  .x { background: none; border: none; color: var(--muted); font-size: 1.1rem; line-height: 1; padding: 0 0.2rem; opacity: 0.5; }
-  .x:hover { opacity: 1; color: var(--rust); }
-  .addms { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
-  .addms input { flex: 1; }
-  .count { font-family: var(--sans); font-size: 0.75rem; color: var(--muted); margin-left: auto; }
-
-  input[type=text], textarea, select {
-    background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px;
-    padding: 0.5rem 0.7rem; font-size: 16px; min-width: 0;
-  }
-  textarea { width: 100%; min-height: 4.5rem; resize: vertical; }
-  select { font-family: var(--sans); }
-  .btn { background: var(--gold); color: #1a1408; border: none; border-radius: 8px; padding: 0.5rem 1rem; font-family: var(--sans); font-size: 0.85rem; font-weight: 600; }
-  .btn.ghost { background: none; color: var(--ink); border: 1px solid var(--line); font-weight: normal; }
-  .link { background: none; border: none; color: var(--gold); font-family: var(--sans); font-size: 0.8rem; padding: 0; text-decoration: underline; text-underline-offset: 3px; }
-  .link.quiet { color: var(--muted); }
-
-  /* Check-ins */
-  .grid { display: grid; grid-template-columns: minmax(0, 8rem) repeat(12, 1fr); gap: 3px; align-items: center; font-family: var(--sans); font-size: 0.68rem; }
-  .grid .m { text-align: center; color: var(--muted); }
-  .grid .m.now { color: var(--gold); }
-  .grid .n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 0.3rem; font-size: 0.75rem; }
-  .grid .c { height: 18px; border-radius: 3px; background: var(--panel-2); cursor: pointer; }
-  .grid .c.t { background: var(--green); } .grid .c.s { background: #6d6a62; } .grid .c.d { background: var(--rust); }
-  .grid .c.sel { outline: 1px solid var(--gold); outline-offset: 1px; }
-  .legend { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.75rem; font-family: var(--sans); font-size: 0.75rem; color: var(--muted); }
-  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 0.35rem; vertical-align: -1px; }
-  .monthnav { display: flex; gap: 0.5rem; align-items: center; }
-  .monthnav button { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 0.1rem 0.6rem; font-family: var(--sans); }
-  .monthnav button:disabled { opacity: 0.3; }
-  .rate { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0; border-top: 1px solid var(--line); flex-wrap: wrap; }
-  .rate:first-child { border-top: none; }
-  .rate .nm { flex: 1 1 10rem; }
-  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
-  .seg button { background: none; border: none; padding: 0.35rem 0.65rem; font-family: var(--sans); font-size: 0.75rem; color: var(--muted); }
-  .seg button + button { border-left: 1px solid var(--line); }
-  .seg button.on.t { background: var(--green); color: #10160f; }
-  .seg button.on.s { background: #6d6a62; color: var(--ink); }
-  .seg button.on.d { background: var(--rust); color: #1a0f0c; }
-  .prompt { display: block; margin: 1rem 0 0.35rem; }
-
-  /* Bottom tabs */
-  nav.tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; background: rgba(15,17,21,0.96); border-top: 1px solid var(--line); display: flex; justify-content: center; padding-bottom: env(safe-area-inset-bottom); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
-  nav.tabs button { flex: 1; max-width: 180px; background: none; border: none; padding: 0.75rem 0.25rem 0.8rem; font-family: var(--sans); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); border-top: 2px solid transparent; margin-top: -1px; }
-  nav.tabs button.on { color: var(--gold); border-top-color: var(--gold); }
-
-  .foot { margin-top: 2.5rem; font-family: var(--sans); font-size: 0.75rem; color: var(--muted); line-height: 1.9; }
-  .foot a { color: var(--muted); }
-  .hands { margin-top: 2.5rem; text-align: center; font-style: italic; color: var(--muted); font-size: 0.92rem; }
-  .hands span { display: block; font-style: normal; font-family: var(--sans); font-size: 0.68rem; letter-spacing: 0.14em; margin-top: 0.25rem; }
-
-  @media (max-width: 520px) {
-    .fromto { grid-template-columns: 1fr; gap: 0.4rem; }
-    .fromto .arrow { padding: 0; transform: rotate(90deg); width: 1rem; }
-    .grid { grid-template-columns: minmax(0, 5.5rem) repeat(12, 1fr); gap: 2px; }
-    .grid .m { font-size: 0.6rem; }
-  }
+  .foot { margin-top: 3.5rem; text-align: center; font-style: italic; color: var(--muted); font-size: 0.9rem; }
+  .foot span { display: block; font-style: normal; font-family: var(--sans); font-size: 0.68rem; letter-spacing: 0.14em; margin-top: 0.25rem; }
 </style>
 </head>
 <body>
-
-<div class="wrap"><main id="view"></main><div class="foot" id="foot"></div></div>
-
-<nav class="tabs" id="tabs">
-  <button data-tab="year">The year</button>
-  <button data-tab="quarters">Quarters</button>
-  <button data-tab="checkin">Check-in</button>
-</nav>
+<div class="wrap" id="app"></div>
 
 <script>
 (function () {
   'use strict';
 
-  var YEAR = 2027;
-  var KEY = 'planning.year.v1';
-  var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var KEY = 'planning.simple.v1';
+  var DRAFT = {
+    lead: 'Planted in one church, making disciples on campus, and getting ready to be a husband.',
+    goals: [
+      { text: 'Raise up disciples', step: 'Write my disciple-making pathway on one page', taken: 0 },
+      { text: 'Be planted', step: 'Decide which church I am committing to', taken: 0 },
+      { text: 'Prepare for marriage', step: 'Ask a married mentor to walk with me', taken: 0 }
+    ]
+  };
 
-  function readJSON(k) { try { var r = localStorage.getItem(k); return r ? JSON.parse(r) : null; } catch (e) { return null; } }
-  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
-
-  /* The vision lives in the Vision app (same origin, shared storage).
-     This plan reads it and never writes to it. */
-  var vision = readJSON('vision-app-v2');
-  function visionText() {
-    var t = vision && (vision.vision || (vision.visionVersions && vision.visionVersions.length && vision.visionVersions[vision.visionVersions.length - 1].text));
-    if (!t) t = 'To raise up healthy, godly, biblical disciples transformed into the image of Christ — and to be continually transformed into that image myself.';
-    var d = document.createElement('div'); d.innerHTML = t; return d.textContent;
-  }
-
-  /* Starting draft, written from your own Vision, growth edges, Building &
-     Blessing and Centered. Every word is meant to be rewritten. */
-  function draft() {
-    function ms(q, t) { return { id: uid(), q: q, t: t, done: false }; }
-    return {
-      v: 1, year: YEAR, isDraft: true,
-      direction: 'Rooted in one place, with a clear pathway for making disciples, raising up young leaders on campus who look like Jesus — and ready, in every way, to be a husband.',
-      verse: 'The heart of man plans his way, but the LORD establishes his steps.',
-      verseRef: 'Proverbs 16:9',
-      areas: [
-        { id: 'god', title: 'Walk with God', ties: 'Remain in Jesus · Walk with God',
-          now: 'Prayer and the Word, growing in consistency.',
-          to: 'Deeply saturated in the Word, praying daily, and obeying what I read — not just hearing it.',
-          why: 'Everything else flows from remaining in him (John 15).',
-          ms: [ms(1, 'Choose how I will read through Scripture in 2027 and start on Jan 1'), ms(2, 'Take a half-day of prayer and listening'), ms(3, 'Take a half-day of prayer and listening'), ms(4, 'Take a day to look back over the year with God')] },
-        { id: 'disciples', title: 'Raise up disciples', ties: 'Central pursuits · Those I disciple',
-          now: 'A desire and a few relationships, but no clear pathway yet.',
-          to: 'A one-page pathway (reached → rooted → raised up → released), with men walking through it and the first leaders being sent.',
-          why: 'Reaching Gen Z on campus, raising up leaders, sending them to the ends of the earth.',
-          ms: [ms(1, 'Draft the stages: reached, rooted, raised up, released. What happens at each?'), ms(1, 'Have a mentor critique the pathway'), ms(2, 'Walk at least two people through the first stage'), ms(3, 'Start a discipleship cycle on campus with the fall semester'), ms(4, 'Name the first leader to raise up and release')] },
-        { id: 'preaching', title: 'Preaching that leads to discipleship', ties: 'Growth edge · My calling',
-          now: 'Preaching is a growth edge.',
-          to: 'Opening the Word with clarity and power, and every message handing people a next step into real discipleship.',
-          why: 'Never an end in itself — it serves the pathway.',
-          ms: [ms(1, 'Pick one passage, write a 10-minute message, and ask a pastor or mentor to critique it'), ms(2, 'Preach or teach 6 times and get honest feedback on each'), ms(3, 'Preach or teach 6 more times')] },
-        { id: 'role', title: 'Clarity on my role', ties: 'Growth edge · Possible positions',
-          now: 'Still holding the pastor question open.',
-          to: 'A decision on the pastor question, made with real counsel, held with open hands.',
-          why: 'Role clarity tells me what to say no to.',
-          ms: [ms(1, 'Name three people to ask about the pastor question, including a pastor who knows me'), ms(2, 'Walk it through the gates in Centered and decide')] },
-        { id: 'planted', title: 'Where I’m planted', ties: 'Major decision · Church',
-          now: 'Still discerning where I am committed and plugged in.',
-          to: 'Planted in a church that feels like family, committed and serving.',
-          why: 'Settled with a people to do life with completely.',
-          ms: [ms(1, 'Decide where I am planted, and walk the decision through Centered'), ms(2, 'Join a group and a place to serve')] },
-        { id: 'marriage', title: 'Preparing for marriage', ties: 'Major decision · Marriage · My wife',
-          now: 'The desire is there, but the concrete next steps aren’t yet.',
-          to: 'A husband-in-preparation who looks like Christ: pure, clear on where I’m going, financially backed, with solid friends and mentors.',
-          why: 'Preparing for her now, and learning how to recognise her.',
-          ms: [ms(1, 'Write out three concrete marriage-prep steps for the year'), ms(2, 'Ask a married mentor to walk with me in this')] },
-        { id: 'friends', title: 'Deep friendships', ties: 'Growth edge · Dreams held lightly',
-          now: 'Co-laborers, but not yet a people.',
-          to: 'Two or three men I meet with regularly, and one older mentor.',
-          why: 'Friends who move me forward — and who will stand with me in marriage.',
-          ms: [ms(1, 'Write the names of the men I want to go deeper with, and ask one to meet'), ms(2, 'Ask an older man to mentor me')] },
-        { id: 'provision', title: 'Provision', ties: 'Providing · Support raising · AI work',
-          now: 'Thinking through support raising, AI work and house flipping.',
-          to: 'Provision that buys back time for disciple-making instead of time traded for money.',
-          why: 'Resources that fund and free the pursuit of what is central.',
-          ms: [ms(1, 'List three ideas that use my digital and AI gifting; pick one to test'), ms(2, 'Ship one small income experiment and learn whether people will pay'), ms(2, 'Decide how support raising fits')] },
-        { id: 'strength', title: 'Strength & health', ties: 'Growth edge · My health',
-          now: 'Building it at PF.',
-          to: 'Measurably stronger, training three times a week, with a strong body to carry the callings for the long haul.',
-          why: 'Build now, while the window is open.',
-          ms: [ms(1, 'Write the weekly training plan: which days, which lifts, starting weights'), ms(2, 'Retest the main lifts'), ms(4, 'Retest the main lifts')] }
-      ],
-      quarters: {
-        1: 'Lay foundations: decide where I’m planted, draft the pathway, set the rhythms.',
-        2: 'Walk people through the first stage of the pathway.',
-        3: 'Launch the fall semester on campus.',
-        4: 'Raise up and release; look back with God and set 2028.'
-      },
-      checkins: {}
-    };
-  }
-
-  var state = readJSON(KEY);
-  if (!state || !Array.isArray(state.areas)) state = draft();
-  state.quarters = state.quarters || {};
-  state.checkins = state.checkins || {};
+  var state;
+  try { state = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
+  if (!state || !Array.isArray(state.goals)) state = JSON.parse(JSON.stringify(DRAFT));
   function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
 
-  /* ───────── Time ───────── */
-  var now = new Date();
-  var started = now.getFullYear() >= YEAR;
-  var curMonth = now.getFullYear() === YEAR ? now.getMonth() : (now.getFullYear() > YEAR ? 11 : 0);
-  var curQ = Math.floor(curMonth / 3) + 1;
-  function daysUntil() { return Math.ceil((new Date(YEAR, 0, 1) - now) / 864e5); }
-
-  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
-  // An in-place editable field bound to a path in state.
-  function ed(path, value, ph, cls, tag) {
-    tag = tag || 'div';
-    return '<' + tag + (cls ? ' class="' + cls + '"' : '') + ' contenteditable="true" data-path="' + path + '" data-ph="' + esc(ph || '') + '">' + esc(value || '') + '</' + tag + '>';
-  }
-  function areaById(id) { return state.areas.find(function (a) { return a.id === id; }); }
-  function rating(m, id) { var c = state.checkins[m]; return c && c.r ? c.r[id] || '' : ''; }
-
-  /* ───────── Views ───────── */
-  var tab = 'year';
-  try { tab = sessionStorage.getItem('planning.year.tab') || 'year'; } catch (e) {}
-  var qView = curQ, mView = curMonth;
-  var view = document.getElementById('view');
-
-  function renderYear() {
-    var h = '<div class="head"><div><span class="label">Where I sense God leading</span><div class="year-num">' + YEAR + '</div></div>' +
-      '<span class="label">' + (started ? MONTHS[curMonth] + ' · Q' + curQ : daysUntil() + ' days to go') + '</span></div>';
-
-    if (state.isDraft) h += '<div class="draft"><span>A starting draft, written from your Vision, growth edges and decisions. Tap any text to rewrite it in your own words.</span><button class="link" data-act="blank">Start blank instead</button></div>';
-
-    h += '<div class="direction"><span class="label">The direction</span>' + ed('direction', state.direction, 'By the end of ' + YEAR + ', I sense God leading me toward…', 'text') + '</div>';
-    h += ed('verse', state.verse, 'A verse for the year', 'verse') + ed('verseRef', state.verseRef, 'Reference', 'verse-ref');
-    h += '<div class="vision-line">Serving the vision: <b>' + esc(visionText()) + '</b></div>';
-
-    h += '<h2>From here to there <span class="label">' + state.areas.length + ' areas</span></h2>';
-    state.areas.forEach(function (a, i) {
-      var all = a.ms || [], done = all.filter(function (m) { return m.done; }).length;
-      var trail = '';
-      for (var m = 0; m < 12; m++) trail += '<i class="' + rating(m, a.id) + '" title="' + MONTHS[m] + '"></i>';
-      var p = 'areas.' + i + '.';
-      h += '<div class="card" data-area="' + a.id + '">' +
-        '<div class="area-head">' + ed(p + 'title', a.title, 'Name this area', 'area-title') +
-        '<button class="x" data-act="area-del" title="Remove area">×</button></div>' +
-        ed(p + 'ties', a.ties, 'What in your vision this serves', 'ties') +
-        '<div class="fromto"><div class="col"><span class="label">End of ' + (YEAR - 1) + '</span>' + ed(p + 'now', a.now, 'Where I am now', 'val') + '</div>' +
-        '<div class="arrow">→</div>' +
-        '<div class="col to"><span class="label">By Dec 31, ' + YEAR + '</span>' + ed(p + 'to', a.to, 'Where I sense God leading', 'val') + '</div></div>' +
-        '<div class="why"><span class="label">Why</span>' + ed(p + 'why', a.why, 'Why I believe God is in this', '', 'span') + '</div>' +
-        '<div class="trail">' + trail + '<span class="q">' + done + '/' + all.length + ' milestones</span></div>' +
-        '</div>';
-    });
-    h += '<div style="margin-top:.8rem"><button class="btn ghost" data-act="area-add">+ Add an area</button></div>';
-    h += '<div class="hands">“Many are the plans in the mind of a man, but it is the purpose of the LORD that will stand.”<span>HELD WITH OPEN HANDS · PROVERBS 19:21</span></div>';
-    view.innerHTML = h;
-  }
-
-  function renderQuarters() {
-    var ranges = ['Jan – Mar', 'Apr – Jun', 'Jul – Sep', 'Oct – Dec'];
-    var h = '<div class="head"><h1>Quarters</h1><span class="label">' + YEAR + '</span></div>';
-    h += '<div class="qtabs">' + [1, 2, 3, 4].map(function (q) {
-      var all = 0, done = 0;
-      state.areas.forEach(function (a) { (a.ms || []).forEach(function (m) { if (m.q === q) { all++; if (m.done) done++; } }); });
-      return '<button data-q="' + q + '" class="' + (q === qView ? 'on' : '') + '">Q' + q + (started && q === curQ ? ' · now' : '') + '<small>' + ranges[q - 1] + ' · ' + done + '/' + all + '</small></button>';
-    }).join('') + '</div>';
-    h += '<div class="qfocus card"><span class="label">What Q' + qView + ' is for</span>' + ed('quarters.' + qView, state.quarters[qView], 'One sentence: what this quarter is for', 'text') + '</div>';
-
-    state.areas.forEach(function (a) {
-      var list = (a.ms || []).filter(function (m) { return m.q === qView; });
-      h += '<h2>' + esc(a.title || 'Untitled area') + '<span class="count">' + list.filter(function (m) { return m.done; }).length + '/' + list.length + '</span></h2>' +
-        '<div class="card" data-area="' + a.id + '">' + (a.to ? '<div class="small muted">Toward: ' + esc(a.to) + '</div>' : '') +
-        '<ul class="ms">' + list.map(function (m) {
-          return '<li class="' + (m.done ? 'done' : '') + '" data-ms="' + m.id + '"><button class="check' + (m.done ? ' on' : '') + '" data-act="ms-toggle" aria-label="Done">' + (m.done ? '✓' : '') + '</button>' +
-            '<span class="t" contenteditable="true" data-ms-text="1">' + esc(m.t) + '</span>' +
-            '<select data-move="1" aria-label="Move to quarter">' + [1, 2, 3, 4].map(function (q) { return '<option value="' + q + '"' + (q === m.q ? ' selected' : '') + '>Q' + q + '</option>'; }).join('') + '</select>' +
-            '<button class="x" data-act="ms-del" title="Remove">×</button></li>';
-        }).join('') + '</ul>' +
-        (list.length ? '' : '<div class="small muted" style="font-style:italic;margin-top:.4rem">Nothing this quarter. That can be on purpose.</div>') +
-        '<div class="addms"><input type="text" placeholder="Add a Q' + qView + ' milestone, then Enter" data-ms-new="1"></div></div>';
-    });
-    view.innerHTML = h;
-  }
-
-  function renderCheckin() {
-    var h = '<div class="head"><h1>Check-in</h1><span class="label">once a month</span></div>' +
-      '<p class="muted small" style="margin-top:.3rem">For each area: am I moving toward where God is leading, holding steady, or drifting?</p>';
-
-    h += '<div class="card" style="margin-top:1rem"><div class="grid"><span></span>' +
-      MONTHS.map(function (m, i) { return '<span class="m' + (started && i === curMonth ? ' now' : '') + '">' + m[0] + '</span>'; }).join('');
-    state.areas.forEach(function (a) {
-      h += '<span class="n">' + esc(a.title || 'Untitled') + '</span>';
-      for (var m = 0; m < 12; m++) h += '<span class="c ' + rating(m, a.id) + (m === mView ? ' sel' : '') + '" data-month="' + m + '" title="' + MONTHS[m] + '"></span>';
-    });
-    h += '</div><div class="legend"><span><i style="background:var(--green)"></i>Toward</span><span><i style="background:#6d6a62"></i>Steady</span><span><i style="background:var(--rust)"></i>Drifting</span><span><i style="background:var(--panel-2)"></i>Not yet</span></div></div>';
-
-    var c = state.checkins[mView] || {};
-    h += '<h2><span class="monthnav"><button data-act="m-prev"' + (mView === 0 ? ' disabled' : '') + ' aria-label="Previous month">‹</button>' +
-      new Date(YEAR, mView, 1).toLocaleDateString(undefined, { month: 'long' }) + ' ' + YEAR +
-      '<button data-act="m-next"' + (mView === 11 ? ' disabled' : '') + ' aria-label="Next month">›</button></span></h2>';
-    if (!started) h += '<p class="muted small" style="margin:-.2rem 0 .6rem">The year hasn’t started yet. Your first check-in is at the end of January.</p>';
-    h += '<div class="card">' + state.areas.map(function (a) {
-      var r = rating(mView, a.id);
-      return '<div class="rate" data-area="' + a.id + '"><span class="nm">' + esc(a.title || 'Untitled') + '</span><span class="seg">' +
-        [['t', 'Toward'], ['s', 'Steady'], ['d', 'Drifting']].map(function (o) {
-          return '<button class="' + o[0] + (r === o[0] ? ' on' : '') + '" data-act="rate" data-v="' + o[0] + '">' + o[1] + '</button>';
-        }).join('') + '</span></div>';
-    }).join('') + '</div>';
-
-    [['heard', 'What do I sense God saying this month?'], ['drift', 'Where am I drifting, and why?'], ['next', 'What one step keeps me on the path next month?']].forEach(function (p) {
-      h += '<label class="label prompt">' + p[1] + '</label><textarea data-note="' + p[0] + '">' + esc(c[p[0]] || '') + '</textarea>';
-    });
-    view.innerHTML = h;
-  }
-
-  function renderFoot() {
-    document.getElementById('foot').innerHTML =
-      'The vision comes from <a href="../vision/plan.html">Vision</a>' + (vision ? '' : ' (not opened in this browser yet, so a saved copy is shown)') +
-      '. Walk decisions through <a href="../decision-making-gods-will/">Centered</a>. Responsibilities live in <a href="../stewardship/">Building &amp; Blessing</a>.' +
-      '<br><button class="link quiet" data-act="export">Save a backup</button> · <button class="link quiet" data-act="import">Load a backup</button>';
-  }
+  function esc(s) { return String(s || '').replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function ed(path, value, ph) { return '<div class="text" contenteditable="true" data-path="' + path + '" data-ph="' + ph + '">' + esc(value) + '</div>'; }
 
   function render() {
-    document.querySelectorAll('#tabs button').forEach(function (b) { b.classList.toggle('on', b.dataset.tab === tab); });
-    ({ year: renderYear, quarters: renderQuarters, checkin: renderCheckin }[tab] || renderYear)();
-    renderFoot();
+    var h = '<div class="year">2027</div>' +
+      '<div class="lead"><span class="label">Where God is leading me</span>' + ed('lead', state.lead, 'One sentence') + '</div>';
+    state.goals.forEach(function (g, i) {
+      h += '<div class="goal"><span class="num">' + (i + 1) + '</span>' + ed('goals.' + i + '.text', g.text, 'Something for this year') +
+        '<div class="step"><button class="check" data-done="' + i + '" aria-label="Step done"></button>' +
+        ed('goals.' + i + '.step', g.step, 'Next step') + '</div>' +
+        (g.taken ? '<div class="taken">' + g.taken + ' step' + (g.taken === 1 ? '' : 's') + ' taken</div>' : '') + '</div>';
+    });
+    h += '<div class="foot">“The heart of man plans his way, but the LORD establishes his steps.”<span>PROVERBS 16:9</span></div>';
+    document.getElementById('app').innerHTML = h;
   }
-
-  /* ───────── Editing ───────── */
-
-  function setPath(path, value) {
-    var parts = path.split('.'), o = state;
-    for (var i = 0; i < parts.length - 1; i++) o = o[parts[i]] = o[parts[i]] || {};
-    o[parts[parts.length - 1]] = value;
-  }
-  function msOf(el) {
-    var a = areaById(el.closest('[data-area]').dataset.area);
-    return { a: a, m: a.ms.find(function (x) { return x.id === el.closest('[data-ms]').dataset.ms; }) };
-  }
-  function commit() { state.isDraft = false; save(); }
 
   document.addEventListener('input', function (e) {
-    var el = e.target, d = el.dataset || {};
-    if (d.path) { setPath(d.path, el.textContent.trim()); commit(); }
-    else if (d.msText) { msOf(el).m.t = el.textContent.trim(); commit(); }
-    else if (d.note) { var c = state.checkins[mView] = state.checkins[mView] || {}; c[d.note] = el.value; commit(); }
+    var p = e.target.dataset.path; if (!p) return;
+    var parts = p.split('.'), o = state;
+    for (var i = 0; i < parts.length - 1; i++) o = o[parts[i]];
+    o[parts[parts.length - 1]] = e.target.textContent.trim();
+    save();
   });
-
-  // Enter finishes a one-line edit rather than adding a line break.
   document.addEventListener('keydown', function (e) {
-    if (e.key !== 'Enter') return;
-    if (e.target.isContentEditable) { e.preventDefault(); e.target.blur(); return; }
-    if (e.target.dataset.msNew) {
-      var v = e.target.value.trim(); if (!v) return;
-      var a = areaById(e.target.closest('[data-area]').dataset.area);
-      (a.ms = a.ms || []).push({ id: uid(), q: qView, t: v, done: false });
-      commit(); render();
-      var again = document.querySelector('[data-area="' + a.id + '"] [data-ms-new]');
-      if (again) again.focus();
-    }
+    if (e.key === 'Enter' && e.target.isContentEditable) { e.preventDefault(); e.target.blur(); }
   });
-  // Paste plain text only into editable fields.
   document.addEventListener('paste', function (e) {
     if (!e.target.isContentEditable) return;
     e.preventDefault();
-    document.execCommand('insertText', false, (e.clipboardData || window.clipboardData).getData('text').replace(/\s*\n\s*/g, ' '));
-  });
-  document.addEventListener('change', function (e) {
-    if (!e.target.dataset.move) return;
-    msOf(e.target).m.q = +e.target.value; commit(); render();
+    document.execCommand('insertText', false, e.clipboardData.getData('text').replace(/\s+/g, ' '));
   });
 
-  document.getElementById('tabs').addEventListener('click', function (e) {
-    var b = e.target.closest('button[data-tab]'); if (!b) return;
-    tab = b.dataset.tab;
-    try { sessionStorage.setItem('planning.year.tab', tab); } catch (err) {}
-    render(); window.scrollTo(0, 0);
-  });
-
+  // Ticking a step counts it and clears the line for the next one.
   document.addEventListener('click', function (e) {
-    var q = e.target.closest('[data-q]');
-    if (q) { qView = +q.dataset.q; render(); return; }
-    var cell = e.target.closest('.grid .c');
-    if (cell) { mView = +cell.dataset.month; render(); return; }
-
-    var el = e.target.closest('[data-act]');
-    if (!el) return;
-    var areaEl = el.closest('[data-area]');
-    var a = areaEl && areaById(areaEl.dataset.area);
-    switch (el.dataset.act) {
-      case 'ms-toggle': { var m = msOf(el).m; m.done = !m.done; break; }
-      case 'ms-del': { var r = msOf(el); r.a.ms = r.a.ms.filter(function (x) { return x !== r.m; }); break; }
-      case 'area-del':
-        if (!confirm('Remove “' + (a.title || 'this area') + '” and its milestones?')) return;
-        state.areas = state.areas.filter(function (x) { return x !== a; }); break;
-      case 'area-add': {
-        state.areas.push({ id: uid(), title: '', ties: '', now: '', to: '', why: '', ms: [] });
-        commit(); render();
-        var titles = document.querySelectorAll('.area-title'); if (titles.length) titles[titles.length - 1].focus();
-        return;
-      }
-      case 'rate': {
-        var c = state.checkins[mView] = state.checkins[mView] || {};
-        c.r = c.r || {};
-        c.r[a.id] = c.r[a.id] === el.dataset.v ? '' : el.dataset.v;
-        break;
-      }
-      case 'm-prev': if (mView > 0) mView--; render(); return;
-      case 'm-next': if (mView < 11) mView++; render(); return;
-      case 'blank':
-        if (!confirm('Clear the draft and start from a blank page?')) return;
-        state = { v: 1, year: YEAR, isDraft: false, direction: '', verse: '', verseRef: '', areas: [], quarters: {}, checkins: {} };
-        break;
-      case 'export': exportBackup(); return;
-      case 'import': importBackup(); return;
-      default: return;
-    }
-    commit(); render();
+    var b = e.target.closest('[data-done]'); if (!b) return;
+    var g = state.goals[+b.dataset.done];
+    if (!g.step) return;
+    g.taken = (g.taken || 0) + 1;
+    g.step = '';
+    save(); render();
+    document.querySelector('[data-path="goals.' + b.dataset.done + '.step"]').focus();
   });
-
-  function exportBackup() {
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' }));
-    a.download = 'plan-' + YEAR + '.json';
-    document.body.appendChild(a); a.click(); a.remove();
-  }
-  function importBackup() {
-    var inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.json,application/json';
-    inp.onchange = function () {
-      var f = inp.files[0]; if (!f) return;
-      f.text().then(function (t) {
-        var d = JSON.parse(t);
-        if (!d || !Array.isArray(d.areas)) throw new Error('not a plan');
-        if (!confirm('Replace this plan with ' + f.name + '?')) return;
-        localStorage.setItem(KEY, JSON.stringify(d)); location.reload();
-      }).catch(function () { alert('That file is not a year plan backup.'); });
-    };
-    inp.click();
-  }
 
   render();
-  if ('serviceWorker' in navigator && location.protocol === 'https:' && window.top === window) navigator.serviceWorker.register('sw.js').catch(function () {});
+  if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(function () {});
 })();
 </script>
 </body>
