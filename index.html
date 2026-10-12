@@ -110,7 +110,9 @@
   .star.key { color: var(--gold); letter-spacing: -0.15em; }
   h2.tight { margin-top: 1.25rem; }
   .prep { margin-top: 0.9rem; border-top: 1px solid rgba(201, 162, 94, 0.3); padding-top: 0.7rem; }
-  .prep-head { display: flex; justify-content: space-between; align-items: baseline; }
+  .prep-head { display: flex; width: 100%; justify-content: space-between; align-items: baseline; background: none; border: none; padding: 0; text-align: left; }
+  .prep-head .chev { font-style: normal; display: inline-block; margin-left: 0.3rem; transition: transform 0.15s; transform: rotate(-90deg); }
+  .prep.open .prep-head .chev { transform: none; }
   .prep-n { font-family: var(--sans); font-size: 0.8rem; color: var(--gold); }
   .prep-bar { height: 4px; background: var(--panel-2); border-radius: 99px; margin: 0.4rem 0 0.5rem; overflow: hidden; }
   .prep-bar span { display: block; height: 100%; background: var(--gold); }
@@ -576,12 +578,12 @@
         var prep = '';
         if (m.area === 'marriage') {
           var list = state.marriagePrep || [], ready = list.filter(function (x) { return x.done; }).length;
-          prep = '<div class="prep"><div class="prep-head"><span class="label">Ready for marriage</span><span class="prep-n">' + ready + ' of ' + list.length + '</span></div>' +
+          prep = '<div class="prep' + (state.prepOpen ? ' open' : '') + '"><button class="prep-head" data-act="prep-fold" aria-expanded="' + !!state.prepOpen + '"><span class="label">Ready for marriage</span><span class="prep-n">' + ready + ' of ' + list.length + ' <i class="chev">\u25be</i></span></button>' +
             '<div class="prep-bar"><span style="width:' + (list.length ? 100 * ready / list.length : 0) + '%"></span></div>' +
-            list.map(function (x) {
+            (!state.prepOpen ? '' : list.map(function (x) {
               return '<div class="prep-it' + (x.done ? ' done' : '') + '" data-prep="' + x.id + '"><button class="check' + (x.done ? ' on' : '') + '" data-act="prep-toggle" aria-label="Ready">' + (x.done ? '\u2713' : '') + '</button>' +
                 '<span contenteditable="true" data-prep-text="1" data-ph="Something to be ready">' + esc(x.text) + '</span><button class="x" data-act="prep-del" title="Remove">\u00d7</button></div>';
-            }).join('') + '<button class="add" data-act="prep-add">+ Add</button></div>';
+            }).join('') + '<button class="add" data-act="prep-add">+ Add</button>') + '</div>';
         }
         return '<div class="fcard first"><div class="ft">' + esc(m.title) + '</div><div class="fw">' + whenText(m.date) + ' \u00b7 ' + until(m.date) + ageAt(m.date) + '</div>' + prep + '</div>';
       }).join('') + '</div>';
@@ -788,6 +790,7 @@
         var n = { id: uid(), area: el.dataset.area, title: '', start: start, due: due, done: false };
         state.goals.push(n); openId = n.id; changed(); render(); focusTitle(); return;
       }
+      case 'prep-fold': state.prepOpen = !state.prepOpen; save(); render(); return;
       case 'prep-toggle': prepItem(el).done = !prepItem(el).done; break;
       case 'prep-del': { var pid = el.closest('[data-prep]').dataset.prep; state.marriagePrep = state.marriagePrep.filter(function (x) { return x.id !== pid; }); break; }
       case 'prep-add': {
