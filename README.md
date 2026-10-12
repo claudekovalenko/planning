@@ -11,8 +11,8 @@ five-year plan:
   Each year shows the age I will be (born 1995).
 - **Timeline:** the big things on one straight line. At the top, the two
   biggest things (finding my church and whom I marry), then the next big
-  milestones with how far away they are and my age. The line zooms to 10, 20
-  or 50 years and shows the big ones by default, or every milestone. Below it,
+  milestones with how far away they are and my age. The line zooms to 10, 20,
+  50 or 60 years and shows the big ones by default, or every milestone. Below it,
   what is happening now. Milestones are edited behind "Edit milestones": the
   star marks a big one, and two stars one of the biggest. The marriage card
   carries a "Ready for marriage" checklist: strength gain, the car, sufficient

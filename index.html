@@ -48,6 +48,7 @@
   .intro { margin-top: 0.75rem; color: var(--muted); font-size: 0.92rem; max-width: 40rem; }
   .direction { border-left: 2px solid var(--gold); padding: 0.15rem 0 0.15rem 0.9rem; margin-top: 1rem; max-width: 46rem; }
   .direction .text { font-style: italic; font-size: 1.05rem; margin-top: 0.2rem; }
+  .age .sep { font-style: normal; }
   .age { font-family: var(--sans); font-size: 0.75em; color: var(--muted); font-weight: normal; white-space: nowrap; }
   .hd.goal .age, .cell.end .yr .age { color: var(--gold); opacity: 0.8; }
   .draft { margin-top: 1rem; font-family: var(--sans); font-size: 0.8rem; color: var(--muted); }
@@ -200,6 +201,60 @@
     .five .yr .age { display: block; font-size: 0.7rem; }
     .five .yr { display: block; font-family: var(--sans); font-size: 0.75rem; color: var(--muted); padding-top: 0.15rem; }
     .five .cell.end .yr { color: var(--gold); }
+  }
+
+  /* Phone-friendly */
+  .vl { position: relative; margin-top: 0.9rem; padding-left: 1.5rem; }
+  .vl::before { content: ''; position: absolute; left: 0.4rem; top: 0.5rem; bottom: 0.5rem; width: 2px; background: linear-gradient(var(--gold), var(--line)); }
+  .vnow, .vy { position: relative; display: flex; align-items: baseline; gap: 0.6rem; }
+  .vnow::before, .vy::before { content: ''; position: absolute; left: -1.5rem; top: 0.45rem; width: 12px; height: 12px; margin-left: 0.05rem; border-radius: 50%; background: var(--bg); border: 2px solid var(--gold); }
+  .vnow::before { background: var(--gold); box-shadow: 0 0 0 5px var(--gold-soft); }
+  .vnow b, .vy b { font-weight: normal; font-size: 1.25rem; color: var(--gold); }
+  .vnow span, .vy span { font-family: var(--sans); font-size: 0.78rem; color: var(--muted); }
+  .vyear { margin-top: 1.1rem; }
+  .vm { display: flex; gap: 0.6rem; align-items: flex-start; margin-top: 0.45rem; padding: 0.15rem 0; }
+  .vm i { flex: none; width: 8px; height: 8px; border-radius: 50%; margin-top: 0.55rem; }
+  .vm .vt { font-size: 1rem; }
+  .vm .vw { font-family: var(--sans); font-size: 0.74rem; color: var(--muted); }
+  .vm.big { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 0.55rem 0.75rem; }
+  .vm.key { background: var(--gold); border-radius: 10px; padding: 0.65rem 0.8rem; }
+  .vm.key .vt { color: #1a1408; font-weight: bold; font-size: 1.1rem; }
+  .vm.key .vw { color: #3b2d12; }
+  .vm.key i { background: #1a1408 !important; }
+  .vm.done { opacity: 0.45; }
+  .an { position: relative; }
+  .an .an-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+  .it .an select { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; font-size: 16px; cursor: pointer; }
+
+  @media (max-width: 600px) {
+    body { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
+    .wrap { padding-top: 1rem; }
+    nav.parts { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; margin: 0; gap: 0; justify-content: center;
+      background: rgba(15, 17, 21, 0.97); border-top: 1px solid var(--line); border-bottom: none;
+      padding-bottom: env(safe-area-inset-bottom); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+    nav.parts button { flex: 1; max-width: 220px; padding: 0.95rem 0 1rem; border-bottom: none; border-top: 2px solid transparent; margin: -1px 0 0; }
+    nav.parts button.on { border-top-color: var(--gold); }
+    h1 { font-size: 1.45rem; line-height: 1.25; }
+    h1 .age { display: block; font-size: 0.85rem; margin-top: 0.2rem; }
+    h1 .age .sep { display: none; }
+    header { gap: 0.75rem; }
+    .switch { width: 100%; display: flex; }
+    .switch button { flex: 1; padding: 0.65rem 0.25rem; }
+    .x { padding: 0.45rem 0.55rem; font-size: 1.25rem; opacity: 0.6; }
+    .check { width: 26px; height: 26px; font-size: 14px; }
+    .prep-it .check { width: 24px; height: 24px; }
+    .prep-it { padding: 0.4rem 0; }
+    .prep-head { padding: 0.35rem 0; }
+    .add { padding: 0.6rem 1rem; font-size: 0.85rem; }
+    .zoom button { padding: 0.5rem 0.75rem; }
+    .row-top { gap: 0.7rem; }
+    .due { font-size: 0.72rem; }
+    .mrow input, .mrow select, .editor input, .editor select { font-size: 16px; }
+    .it .body { gap: 0.1rem; }
+    .it { padding: 0.45rem 0; border-bottom: 1px solid var(--line); }
+    .direction .text { font-size: 1rem; }
+    .fcard .ft { font-size: 1.2rem; }
+    .fcard.first .ft { font-size: 1.3rem; }
   }
 </style>
 </head>
@@ -484,7 +539,7 @@
 
   // Age reached by the end of a year (birthday falls somewhere in it).
   function age(y) { return state.born ? y - state.born : null; }
-  function ageTag(y, pre) { var a = age(y); return a == null ? '' : ' <span class="age">' + (pre || '\u00b7 age ') + a + '</span>'; }
+  function ageTag(y, pre) { var a = age(y); return a == null ? '' : ' <span class="age">' + (pre ? pre.replace('\u00b7 ', '<i class="sep">\u00b7 </i>') : '<i class="sep">\u00b7 </i>age ') + a + '</span>'; }
 
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function ed(path, value, ph, cls) { return '<div' + (cls ? ' class="' + cls + '"' : '') + ' contenteditable="true" data-path="' + path + '" data-ph="' + esc(ph) + '">' + esc(value) + '</div>'; }
@@ -492,9 +547,9 @@
   /* ── views ── */
   function render() {
     var titles = {
-      long: 'The long view \u00b7 ' + YEARS[4] + '\u2013' + FIFTY + (state.born ? ' <span class="age">\u00b7 ages ' + age(YEARS[4]) + '\u2013' + age(FIFTY) + '</span>' : ''),
-      timeline: 'Timeline' + (state.born ? ' <span class="age">\u00b7 age ' + age(THIS_YEAR) + ' now</span>' : ''),
-      five: 'Five years \u00b7 ' + START + '\u2013' + YEARS[4] + (state.born ? ' <span class="age">\u00b7 ages ' + age(START) + '\u2013' + age(YEARS[4]) + '</span>' : ''),
+      long: 'The long view \u00b7 ' + YEARS[4] + '\u2013' + FIFTY + (state.born ? ' <span class="age"><i class="sep">\u00b7 </i>ages ' + age(YEARS[4]) + '\u2013' + age(FIFTY) + '</span>' : ''),
+      timeline: 'Timeline' + (state.born ? ' <span class="age"><i class="sep">\u00b7 </i>age ' + age(THIS_YEAR) + ' now</span>' : ''),
+      five: 'Five years \u00b7 ' + START + '\u2013' + YEARS[4] + (state.born ? ' <span class="age"><i class="sep">\u00b7 </i>ages ' + age(START) + '\u2013' + age(YEARS[4]) + '</span>' : ''),
       year: START + ageTag(START, '\u00b7 turning ')
     };
     var isTl = state.view === 'timeline';
@@ -554,7 +609,7 @@
 
   // A straight line through life: the big milestones above it, the smaller
   // ones below, and the next big things pulled out as what to focus on now.
-  var ZOOMS = [10, 20, 50];
+  var ZOOMS = [10, 20, 50, 60];
   function ym(s) { var p = String(s || '').split('-'); return new Date(+p[0], p[1] ? +p[1] - 1 : 6, 15); }
   function whenText(s) { var p = String(s || '').split('-'); return p[1] ? MONTHS[+p[1] - 1] + ' ' + p[0] : (p[0] || '?'); }
   function until(s) {
@@ -565,6 +620,24 @@
     return 'in ' + y + ' yr' + (y === 1 ? '' : 's') + (r && y < 5 ? ' ' + r + ' mo' : '');
   }
   function ageAt(s) { return state.born ? ' · age ' + (ym(s).getFullYear() - state.born) : ''; }
+
+  function PHONE() { return window.innerWidth < 600; }
+
+  // On a phone the line runs downward, a year at a time.
+  function vline(list) {
+    var h = '<div class="vl"><div class="vnow"><b>Now</b><span>' + MONTHS[today.getMonth()] + ' ' + THIS_YEAR + ageTag(THIS_YEAR, '\u00b7 age ') + '</span></div>';
+    var byYear = {};
+    list.forEach(function (m) { var y = ym(m.date).getFullYear(); (byYear[y] = byYear[y] || []).push(m); });
+    Object.keys(byYear).sort().forEach(function (y) {
+      h += '<div class="vyear"><div class="vy"><b>' + y + '</b><span>' + (state.born ? 'age ' + (y - state.born) : '') + '</span></div>';
+      byYear[y].forEach(function (m) {
+        h += '<div class="vm' + (m.key ? ' key' : m.big ? ' big' : '') + (m.done ? ' done' : '') + '"><i style="background:' + colorOf(m.area) + '"></i>' +
+          '<div><div class="vt">' + esc(m.title) + '</div><div class="vw">' + whenText(m.date) + ' \u00b7 ' + until(m.date) + '</div></div></div>';
+      });
+      h += '</div>';
+    });
+    return h + '</div>';
+  }
 
   function timelineView() {
     var ms = (state.milestones || []).slice().sort(function (a, b) { return ym(a.date) - ym(b.date); });
@@ -598,7 +671,7 @@
     var zoom = state.zoom || 10;
     var t0 = new Date(THIS_YEAR, 0, 1), t1 = new Date(THIS_YEAR + zoom + 1, 0, 1);
     var fit = Math.min(window.innerWidth, 980) - 34;   // the line's box, inside the page gutter
-    var W = zoom === 50 ? fit : Math.max(fit, zoom * (zoom <= 10 ? 110 : 60));
+    var W = zoom >= 50 ? fit : Math.max(fit, zoom * (zoom <= 10 ? 110 : 60));
     function X(d) { return 16 + (d - t0) / (t1 - t0) * (W - 32); }
     var inRange = ms.filter(function (m) { var d = ym(m.date); return d >= t0 && d < t1 && (state.showAll || m.big); });
     var later = ms.filter(function (m) { return ym(m.date) >= t1 && (state.showAll || m.big); }).length;
@@ -607,7 +680,7 @@
     function lanes(list) {
       var ends = [], out = [];
       list.forEach(function (m) {
-        var x = X(ym(m.date)), w = Math.min(m.key ? 300 : 250, (m.key ? 30 : 22) + m.title.length * (m.key ? 9 : 7.4));
+        var x = X(ym(m.date)), w = Math.min(m.key ? 300 : zoom >= 50 ? 210 : 250, (m.key ? 30 : 22) + m.title.length * (m.key ? 9 : 7.4));
         w = Math.min(w, W - 8);
         // Near the right edge the label hangs to the left of its pin instead.
         var lx = Math.min(x - 8, W - w - 4);
@@ -624,6 +697,8 @@
       return '<button data-zoom="' + z + '" class="' + (z === zoom ? 'on' : '') + '">' + z + ' years</button>';
     }).join('') + '<button data-act="show-all" class="' + (state.showAll ? 'on' : '') + '">' + (state.showAll ? 'All milestones' : 'Big ones only') + '</button>' + (later ? '<span class="muted small">' + later + ' more beyond ' + (THIS_YEAR + zoom) + '</span>' : '') + '</div>';
 
+    if (PHONE()) h += vline(inRange);
+    else {
     h += '<div class="lin-wrap"><div class="lin" style="width:' + W + 'px;height:' + H + 'px">';
     h += '<div class="axis" style="top:' + axis + 'px"></div>';
     var step = zoom <= 10 ? 1 : zoom <= 20 ? (W < 600 ? 5 : 2) : (W < 600 ? 10 : 5);
@@ -649,6 +724,7 @@
         '<div class="pin" style="left:' + it.x + 'px;top:' + axis + 'px;background:' + colorOf(it.m.area) + '"></div>';
     });
     h += '</div></div>';
+    }
 
     // Editable list
     h += '<button class="add" data-act="ms-edit">' + (state.editMs ? 'Done editing' : 'Edit milestones (' + ms.length + ')') + '</button>';
@@ -672,7 +748,7 @@
     h += '<h2>Happening now <span class="label">' + THIS_YEAR + ageTag(THIS_YEAR) + '</span></h2><div class="nowlist">';
     (state.now || []).forEach(function (n) {
       h += '<div class="it" data-now="' + n.id + '"><i class="dot" style="background:' + colorOf(n.area) + '"></i>' +
-        '<div class="body"><span class="an"><select data-now-area="1" aria-label="Area"><option value="">—</option>' + state.areas.map(function (a) {
+        '<div class="body"><span class="an"><span class="an-name">' + esc((state.areas.find(function (a) { return a.id === n.area; }) || {}).name || 'Area') + ' \u25be</span><select data-now-area="1" aria-label="Area"><option value="">—</option>' + state.areas.map(function (a) {
           return '<option value="' + a.id + '"' + (a.id === n.area ? ' selected' : '') + '>' + esc(a.name || 'Untitled') + '</option>'; }).join('') + '</select></span>' +
         '<div contenteditable="true" data-now-text="1" data-ph="Something happening now">' + esc(n.text) + '</div></div>' +
         '<button class="x" data-act="now-del" title="Remove">×</button></div>';
@@ -686,7 +762,7 @@
     var curM = inYear ? today.getMonth() : -1;
     var h = '<p class="intro">' + (today < Y0 ? Math.ceil((Y0 - today) / 864e5) + ' days until ' + START + '. ' : '') +
       'Each goal has a start and a deadline. Tap a goal to change it.</p>';
-    h += '<div class="months">' + MONTHS.map(function (m, i) { return '<span class="' + (i === curM ? 'cur' : '') + '">' + m + '</span>'; }).join('') + '</div>';
+    h += '<div class="months">' + MONTHS.map(function (m, i) { return '<span class="' + (i === curM ? 'cur' : '') + '">' + (PHONE() ? m[0] : m) + '</span>'; }).join('') + '</div>';
 
     state.areas.forEach(function (a) {
       var goals = state.goals.filter(function (g) { return g.area === a.id; })
@@ -841,8 +917,11 @@
   function focusTitle() { var f = document.getElementById('f-title'); if (f) f.focus(); }
 
   var resizeT;
+  var lastW = window.innerWidth;
+  // Only a width change (rotation, desktop resize) redraws; a phone keyboard changes the height.
   window.addEventListener('resize', function () {
-    if (state.view !== 'timeline') return;
+    if (window.innerWidth === lastW) return;
+    lastW = window.innerWidth;
     clearTimeout(resizeT); resizeT = setTimeout(render, 150);
   });
 
