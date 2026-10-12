@@ -1,7 +1,7 @@
 {
-  "name": "Planning — tied to the vision",
-  "short_name": "Planning",
-  "description": "Plan the day, week and season from your vision and priorities.",
+  "name": "2027 — where God is leading",
+  "short_name": "2027",
+  "description": "A year plan for 2027, moving toward the direction God is leading."
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
