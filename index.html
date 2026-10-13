@@ -119,10 +119,13 @@
   .prep-bar span { display: block; height: 100%; background: var(--gold); }
   .prep-it { display: flex; align-items: center; gap: 0.55rem; padding: 0.25rem 0; }
   .prep-it [contenteditable] { flex: 1; min-width: 0; }
-  .prep-it.done [contenteditable] { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
+  .prep-it [contenteditable] { color: var(--muted); }
+  .prep-it.done [contenteditable] { color: var(--ink); }
   .prep-it .check { width: 18px; height: 18px; font-size: 11px; }
   .prep-it .check.on { background: var(--gold); border-color: var(--gold); }
   .prep .add { margin-top: 0.3rem; }
+  .fnote { margin-top: 0.45rem; font-size: 0.92rem; font-style: italic; color: var(--ink); opacity: 0.85; }
+  .prep-note { margin-top: 0.6rem; font-size: 0.88rem; font-style: italic; color: var(--muted); }
   .small-cards .ft { font-size: 1.05rem; }
   .lin .ml.done { opacity: 0.45; text-decoration: line-through; }
   .mlist { display: flex; flex-direction: column; gap: 0.35rem; }
@@ -275,11 +278,11 @@
   var OLD_DIRECTIONS = ['Growing in preaching, and from there into disciple-making: messages that hand people a next step, and a pathway that carries them from reached to sent.', 'Rooted in a church I grow deeply with; from there, growing in preaching, and from preaching into disciple-making.'];
   var DIRECTION = 'Rooted in a church I grow deeply with; from there, growing my own teaching ministry, and from teaching into disciple-making.';
   var CHURCH = { id: 'church', name: 'Church home', years: {
-    2027: 'Found the right church, committed to it, and started serving',
+    2027: 'Found a church where children grow in ways that impress me; committed and serving',
     2028: 'Known there: in a group, with people who know me well',
     2029: 'Grown deeply with this church; trusted with more',
     2030: 'Helping build its culture of discipleship',
-    2031: 'Deeply rooted in a church family I\u2019ve grown with for years' } };
+    2031: 'Deeply rooted in a church family, growing together for years' } };
   function churchGoals() {
     return [
       { title: 'Visit and pray through the churches I\u2019m considering', start: '2027-01-01', due: '2027-02-28' },
@@ -316,9 +319,9 @@
   }
 
   var OLD_LONG_DIRECTION = 'A father in the faith: rooted in one church family, preaching that makes disciples, and generations of leaders sent out to the ends of the earth \u2014 with a full house of children who follow Jesus.';
-  var LONG_DIRECTION = 'A father in the faith: rooted in one church family, a teaching ministry that makes disciples, generations of leaders sent out, a full house of children who follow Jesus \u2014 and finishing well.';
+  var LONG_DIRECTION = 'A father in the faith: rooted in a church family, a teaching ministry that makes disciples, generations of leaders sent out, a full house of children who follow Jesus \u2014 and finishing well.';
   var LONG = {
-    church:    { 2036: 'A pillar in my church family, helping lead it', 2046: 'A father in the faith to a church family I\u2019ve grown with for decades' },
+    church:    { 2036: 'A pillar in my church family, helping lead it', 2046: 'A father in the faith to my church family; my children grown up in it and following Jesus' },
     preaching: { 2036: 'A teaching ministry reaching campuses and churches, moving people into discipleship', 2046: 'Training the next generation of preachers and teachers' },
     ministry:  { 2036: 'A multiplying movement on campuses: disciples, leaders, and leaders of leaders', 2046: 'Generations of disciples, with leaders sent out to the ends of the earth' },
     god:       { 2036: 'A life of prayer and the Word that others can lean on', 2046: 'Still remaining in Jesus, more like him every year' },
@@ -327,7 +330,7 @@
     provision: { 2036: 'Income I don\u2019t trade time for covering much of what the family spends', 2046: 'Free: time fully given to the calling, and generous beyond the tithe' }
   };
   var LONG2 = {
-    church: { 2066: 'An elder and spiritual father to a church family, generations deep', 2076: 'Finished faithful in the church family I gave my life to' },
+    church: { 2066: 'An elder and spiritual father to a church family, generations deep', 2076: 'Finished faithful, wherever God planted us' },
     preaching: { 2066: 'Preachers and teachers I trained, now teaching others', 2076: 'Still opening the Word for whoever will listen' },
     ministry: { 2066: 'Disciples of my disciples\u2019 disciples, on campuses and in the nations', 2076: 'A legacy of faithful people, many I will only meet in eternity' },
     god: { 2066: 'Seasoned in prayer; known as someone who walks with God', 2076: 'Finishing well: \u201cWell done, good and faithful servant\u201d' },
@@ -346,6 +349,14 @@
     if (!st.longDirection || st.longDirection === OLD_LONG_DIRECTION) st.longDirection = LONG_DIRECTION;
     if (!Array.isArray(st.now)) st.now = nowDraft();
   }
+
+  function churchLookDraft() {
+    return ['A great place for my children to grow: kids there who impress me', 'Feels like family; I can grow deeply there',
+      'Faithful to the Word, and making disciples', 'Room for me to teach and serve']
+      .map(function (t) { return { id: uid(), text: t, done: false }; });
+  }
+  var CHURCH_NOTE = 'Can change as God leads \u2014 not church hopping.';
+  var MARRIAGE_NOTE = 'For life. This one doesn\u2019t change.';
 
   function marriagePrepDraft() {
     return ['Strength gain', 'Get the car', 'Sufficient income', 'Free from lust', 'Clear on my call', 'Clear on my church home']
@@ -401,7 +412,7 @@
   function draft() {
     function g(area, title, start, due) { return { id: uid(), area: area, title: title, start: start, due: due, done: false }; }
     return {
-      v: 9, isDraft: true, marriagePrep: marriagePrepDraft(), view: 'five', direction: DIRECTION, milestones: milestonesDraft(),
+      v: 10, isDraft: true, marriagePrep: marriagePrepDraft(), churchLook: churchLookDraft(), churchNote: CHURCH_NOTE, marriageNote: MARRIAGE_NOTE, view: 'five', direction: DIRECTION, milestones: milestonesDraft(),
       areas: [
         JSON.parse(JSON.stringify(CHURCH)),
         JSON.parse(JSON.stringify(PREACHING)),
@@ -435,7 +446,7 @@
 
   var state;
   try { state = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
-  if (!state || !Array.isArray(state.areas) || (state.isDraft && state.v !== 9)) state = draft();
+  if (!state || !Array.isArray(state.areas) || (state.isDraft && state.v !== 10)) state = draft();
   if (state.isDraft && !state.longDirection) addLong(state);
   // A plan already edited under v1: add preaching ahead of disciple-making, keep everything written.
   if (state.v === 1) {
@@ -517,6 +528,17 @@
     var mf = state.areas.find(function (a) { return a.id === 'marriage'; });
     if (mf && (!mf.years[2027] || mf.years[2027] === 'Clear marriage-prep steps, a married mentor, solid friendships')) mf.years[2027] = 'Ready for marriage: stronger, a car, sufficient income, free from lust, clear on my call and church home';
     state.v = 9;
+  }
+  // v9 -> v10: what I'm looking for in a church; open to moving, not hopping.
+  if (state.v === 9) {
+    if (!Array.isArray(state.churchLook)) state.churchLook = churchLookDraft();
+    if (state.churchNote == null) state.churchNote = CHURCH_NOTE;
+    if (state.marriageNote == null) state.marriageNote = MARRIAGE_NOTE;
+    var OLD_C = {"2027": "Found the right church, committed to it, and started serving", "2031": "Deeply rooted in a church family I\u2019ve grown with for years", "2046": "A father in the faith to a church family I\u2019ve grown with for decades", "2076": "Finished faithful in the church family I gave my life to"}, NEW_C = {"2027": "Found a church where children grow in ways that impress me; committed and serving", "2031": "Deeply rooted in a church family, growing together for years", "2046": "A father in the faith to my church family; my children grown up in it and following Jesus", "2076": "Finished faithful, wherever God planted us"};
+    var ch = state.areas.find(function (a) { return a.id === 'church'; });
+    if (ch) Object.keys(OLD_C).forEach(function (y) { if (ch.years[y] === OLD_C[y]) ch.years[y] = NEW_C[y]; });
+    if (state.longDirection === "A father in the faith: rooted in one church family, a teaching ministry that makes disciples, generations of leaders sent out, a full house of children who follow Jesus \u2014 and finishing well.") state.longDirection = LONG_DIRECTION;
+    state.v = 10;
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
   }
   state.goals = state.goals || [];
@@ -639,6 +661,19 @@
     return h + '</div>';
   }
 
+  // A list that folds under a card: heading, count and bar when closed.
+  function checklist(key, openKey, title, ph, noteKey) {
+    var list = state[key] || [], ready = list.filter(function (x) { return x.done; }).length, open = !!state[openKey];
+    return '<div class="prep' + (open ? ' open' : '') + '" data-cl="' + key + '"><button class="prep-head" data-act="cl-fold" data-open-key="' + openKey + '" aria-expanded="' + open + '">' +
+      '<span class="label">' + title + '</span><span class="prep-n">' + ready + ' of ' + list.length + ' <i class="chev">\u25be</i></span></button>' +
+      '<div class="prep-bar"><span style="width:' + (list.length ? 100 * ready / list.length : 0) + '%"></span></div>' +
+      (!open ? '' : list.map(function (x) {
+        return '<div class="prep-it' + (x.done ? ' done' : '') + '" data-cl-id="' + x.id + '"><button class="check' + (x.done ? ' on' : '') + '" data-act="cl-toggle" aria-label="Done">' + (x.done ? '\u2713' : '') + '</button>' +
+          '<span contenteditable="true" data-cl-text="1" data-ph="' + ph + '">' + esc(x.text) + '</span><button class="x" data-act="cl-del" title="Remove">\u00d7</button></div>';
+      }).join('') + '<button class="add" data-act="cl-add">+ Add</button>' +
+      (noteKey ? ed(noteKey, state[noteKey], 'A note', 'prep-note') : '')) + '</div>';
+  }
+
   function timelineView() {
     var ms = (state.milestones || []).slice().sort(function (a, b) { return ym(a.date) - ym(b.date); });
     var keys = ms.filter(function (m) { return m.key && !m.done; });
@@ -649,16 +684,10 @@
     if (keys.length) {
       h += '<h2 class="tight">The ' + (keys.length === 2 ? 'two ' : '') + 'biggest thing' + (keys.length === 1 ? '' : 's') + '</h2><div class="focus">' + keys.map(function (m) {
         var prep = '';
-        if (m.area === 'marriage') {
-          var list = state.marriagePrep || [], ready = list.filter(function (x) { return x.done; }).length;
-          prep = '<div class="prep' + (state.prepOpen ? ' open' : '') + '"><button class="prep-head" data-act="prep-fold" aria-expanded="' + !!state.prepOpen + '"><span class="label">Ready for marriage</span><span class="prep-n">' + ready + ' of ' + list.length + ' <i class="chev">\u25be</i></span></button>' +
-            '<div class="prep-bar"><span style="width:' + (list.length ? 100 * ready / list.length : 0) + '%"></span></div>' +
-            (!state.prepOpen ? '' : list.map(function (x) {
-              return '<div class="prep-it' + (x.done ? ' done' : '') + '" data-prep="' + x.id + '"><button class="check' + (x.done ? ' on' : '') + '" data-act="prep-toggle" aria-label="Ready">' + (x.done ? '\u2713' : '') + '</button>' +
-                '<span contenteditable="true" data-prep-text="1" data-ph="Something to be ready">' + esc(x.text) + '</span><button class="x" data-act="prep-del" title="Remove">\u00d7</button></div>';
-            }).join('') + '<button class="add" data-act="prep-add">+ Add</button>') + '</div>';
-        }
-        return '<div class="fcard first"><div class="ft">' + esc(m.title) + '</div><div class="fw">' + whenText(m.date) + ' \u00b7 ' + until(m.date) + ageAt(m.date) + '</div>' + prep + '</div>';
+        var note = m.area === 'church' ? ed('churchNote', state.churchNote, 'A note', 'fnote') : m.area === 'marriage' ? ed('marriageNote', state.marriageNote, 'A note', 'fnote') : '';
+        if (m.area === 'marriage') prep = checklist('marriagePrep', 'prepOpen', 'Ready for marriage', 'Something to be ready', '');
+        if (m.area === 'church') prep = checklist('churchLook', 'churchOpen', 'What I\u2019m looking for', 'Something I\u2019m looking for', '');
+        return '<div class="fcard first"><div class="ft">' + esc(m.title) + '</div><div class="fw">' + whenText(m.date) + ' \u00b7 ' + until(m.date) + ageAt(m.date) + '</div>' + note + prep + '</div>';
       }).join('') + '</div>';
     }
     if (next.length) {
@@ -811,10 +840,13 @@
   });
   document.addEventListener('input', function (e) {
     if (e.target.dataset.path) { setPath(e.target.dataset.path, e.target.textContent.trim()); changed(); }
+    else if (e.target.dataset.clText) { clItem(e.target).text = e.target.textContent.trim(); changed(); }
     else if (e.target.dataset.prepText) { prepItem(e.target).text = e.target.textContent.trim(); changed(); }
     else if (e.target.dataset.nowText) { nowItem(e.target).text = e.target.textContent.trim(); changed(); }
   });
   function msItem(el) { var id = el.closest('[data-ms-id]').dataset.msId; return state.milestones.find(function (m) { return m.id === id; }); }
+  function clList(el) { return state[el.closest('[data-cl]').dataset.cl]; }
+  function clItem(el) { var id = el.closest('[data-cl-id]').dataset.clId; return clList(el).find(function (x) { return x.id === id; }); }
   function prepItem(el) { var id = el.closest('[data-prep]').dataset.prep; return state.marriagePrep.find(function (x) { return x.id === id; }); }
   function nowItem(el) { var id = el.closest('[data-now]').dataset.now; return state.now.find(function (n) { return n.id === id; }); }
   document.addEventListener('keydown', function (e) {
@@ -866,6 +898,15 @@
         var n = { id: uid(), area: el.dataset.area, title: '', start: start, due: due, done: false };
         state.goals.push(n); openId = n.id; changed(); render(); focusTitle(); return;
       }
+      case 'cl-fold': state[el.dataset.openKey] = !state[el.dataset.openKey]; save(); render(); return;
+      case 'cl-toggle': clItem(el).done = !clItem(el).done; break;
+      case 'cl-del': { var ck = el.closest('[data-cl]').dataset.cl, cid = el.closest('[data-cl-id]').dataset.clId; state[ck] = state[ck].filter(function (x) { return x.id !== cid; }); break; }
+      case 'cl-add': {
+        var key = el.closest('[data-cl]').dataset.cl, cx = { id: uid(), text: '', done: false };
+        (state[key] = state[key] || []).push(cx); changed(); render();
+        var ct = document.querySelector('[data-cl-id="' + cx.id + '"] [data-cl-text]'); if (ct) ct.focus();
+        return;
+      }
       case 'prep-fold': state.prepOpen = !state.prepOpen; save(); render(); return;
       case 'prep-toggle': prepItem(el).done = !prepItem(el).done; break;
       case 'prep-del': { var pid = el.closest('[data-prep]').dataset.prep; state.marriagePrep = state.marriagePrep.filter(function (x) { return x.id !== pid; }); break; }
@@ -908,7 +949,7 @@
       }
       case 'blank':
         if (!confirm('Clear the draft and start blank?')) return;
-        state = { v: 9, isDraft: false, marriagePrep: [], longDirection: '', now: [], milestones: [], born: state.born || null, view: state.view, direction: '', areas: [{ id: uid(), name: '', years: {} }], goals: [] };
+        state = { v: 10, isDraft: false, churchLook: [], churchNote: '', marriageNote: '', marriagePrep: [], longDirection: '', now: [], milestones: [], born: state.born || null, view: state.view, direction: '', areas: [{ id: uid(), name: '', years: {} }], goals: [] };
         break;
       default: return;
     }

@@ -1,5 +1,5 @@
 // Network first, so a new version shows up on the next open; cache for offline.
-const CACHE = 'planning-v20';
+const CACHE = 'planning-v21';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon.svg'];
 
 self.addEventListener('install', (e) => {
