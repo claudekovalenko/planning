@@ -5,7 +5,7 @@ Two parts, switched at the top: **Plan** (5 years, 50 years, 2027) and
 five-year plan:
 
 - **5 years:** the direction for the five years, then a few areas of life — Church home
-  first, then Teaching & digital ministry, then Disciple-making growing out of it, then Walk with God, Marriage & family,
+  first, then Theologian & pastor, then Teaching & digital ministry, then Disciple-making growing out of it, then Walk with God, Marriage & family,
   Health, Provision. For each area: where I want to be by 2031, and a milestone
   for the end of each year from 2027 to 2030. Tap any cell to write in it.
   Each year shows the age I will be (born 1995).

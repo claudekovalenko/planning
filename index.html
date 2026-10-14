@@ -47,6 +47,8 @@
   .switch button.on { background: var(--gold); color: #1a1408; font-weight: 600; }
   .intro { margin-top: 0.75rem; color: var(--muted); font-size: 0.92rem; max-width: 40rem; }
   .direction { border-left: 2px solid var(--gold); padding: 0.15rem 0 0.15rem 0.9rem; margin-top: 1rem; max-width: 46rem; }
+  .trajectory { margin-top: 0.9rem; padding: 0.7rem 0.9rem; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; max-width: 46rem; }
+  .trajectory .text { font-size: 0.95rem; margin-top: 0.25rem; }
   .direction .text { font-style: italic; font-size: 1.05rem; margin-top: 0.2rem; }
   .age .sep { font-style: normal; }
   .age { font-family: var(--sans); font-size: 0.75em; color: var(--muted); font-weight: normal; white-space: nowrap; }
@@ -276,13 +278,40 @@
   function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
 
   var OLD_DIRECTIONS = ['Growing in preaching, and from there into disciple-making: messages that hand people a next step, and a pathway that carries them from reached to sent.', 'Rooted in a church I grow deeply with; from there, growing in preaching, and from preaching into disciple-making.'];
-  var DIRECTION = 'Rooted in a church I grow deeply with; from there, growing my own teaching ministry, and from teaching into disciple-making.';
+  var OLD_DIRECTION_10 = 'Rooted in a church I grow deeply with; from there, growing my own teaching ministry, and from teaching into disciple-making.';
+  var DIRECTION = 'Rooted in a church I grow deeply with; from there, growing my own teaching ministry, and from teaching into disciple-making \u2014 growing all the while as a sound, God-loving theologian.';
   var CHURCH = { id: 'church', name: 'Church home', years: {
     2027: 'Found a church where children grow in ways that impress me; committed and serving',
     2028: 'Known there: in a group, with people who know me well',
     2029: 'Grown deeply with this church; trusted with more',
     2030: 'Helping build its culture of discipleship',
     2031: 'Deeply rooted in a church family, growing together for years' } };
+  var THEOLOGY = { id: 'theology', name: 'Theologian & pastor', years: {
+    2027: 'Growing as a theologian through seminary and the Word — learning, not just grades',
+    2028: 'Teaching doctrine with warmth: sound theology that leads people to love God',
+    2029: 'Speaking on whatever the Word speaks to, without hiding behind a lack of credentials',
+    2030: 'Sound and trusted in both pastoral and academic settings',
+    2031: 'A sound, God-loving theologian and pastoral figure, in whatever capacity God uses me',
+    2036: 'Training others to love God with their minds; at home in the pulpit or the classroom',
+    2046: 'A seasoned theologian-pastor, still growing, still worshipping',
+    2066: 'Wisdom from decades in the Word, passed on to the next generations',
+    2076: 'Still growing in the knowledge of God, all the days of my life' } };
+  var TRAJECTORY = 'All the days of my life I will grow as a sound, God-loving theologian — not heady, but worshipful. No limits but the fear of God: no subject off-limits for lack of a degree. Academic or pastoral, I won’t make a distinction — a healthy, sound theologian and pastoral figure in whatever capacity God uses me.';
+  function theologyGoals() {
+    return [
+      { title: 'Read a systematic theology alongside Scripture', start: '2027-01-04', due: '2027-12-15' },
+      { title: 'Seminary: learn deeply, not just for grades', start: '2027-01-04', due: '2027-05-31' },
+      { title: 'Teach one doctrine clearly and warmly, and get feedback', start: '2027-06-01', due: '2027-09-30' }
+    ].map(function (g) { return { id: uid(), area: 'theology', title: g.title, start: g.start, due: g.due, done: false }; });
+  }
+  function theologyMilestones() {
+    return [
+      ['Teach a theology class or course', '2029-01', 'theology', false],
+      ['Write and teach on doctrine, in church and online', '2031-06', 'theology', false],
+      ['At home in the pulpit or the classroom', '2036-01', 'theology', true]
+    ].map(function (x) { return { id: uid(), title: x[0], date: x[1], area: x[2], big: x[3], key: false, done: false }; });
+  }
+
   function churchGoals() {
     return [
       { title: 'Visit and pray through the churches I\u2019m considering', start: '2027-01-01', due: '2027-02-28' },
@@ -319,7 +348,8 @@
   }
 
   var OLD_LONG_DIRECTION = 'A father in the faith: rooted in one church family, preaching that makes disciples, and generations of leaders sent out to the ends of the earth \u2014 with a full house of children who follow Jesus.';
-  var LONG_DIRECTION = 'A father in the faith: rooted in a church family, a teaching ministry that makes disciples, generations of leaders sent out, a full house of children who follow Jesus \u2014 and finishing well.';
+  var OLD_LONG_DIRECTION_10 = 'A father in the faith: rooted in a church family, a teaching ministry that makes disciples, generations of leaders sent out, a full house of children who follow Jesus \u2014 and finishing well.';
+  var LONG_DIRECTION = 'A father in the faith and a sound, God-loving theologian: rooted in a church family, a teaching ministry that makes disciples, generations of leaders sent out, a full house of children who follow Jesus \u2014 and finishing well.';
   var LONG = {
     church:    { 2036: 'A pillar in my church family, helping lead it', 2046: 'A father in the faith to my church family; my children grown up in it and following Jesus' },
     preaching: { 2036: 'A teaching ministry reaching campuses and churches, moving people into discipleship', 2046: 'Training the next generation of preachers and teachers' },
@@ -390,14 +420,14 @@
       ['An elder and father in the faith to my church', '2066-01', 'church', true],
       ['Finishing well: \u201cWell done, good and faithful servant\u201d', '2076-01', 'god', true],
       ['Training the next generation of teachers', '2046-06', 'preaching', false]
-    ].map(function (x) { return { id: uid(), title: x[0], date: x[1], area: x[2], big: !!x[3], key: x[3] === 'key', done: false }; });
+    ].map(function (x) { return { id: uid(), title: x[0], date: x[1], area: x[2], big: !!x[3], key: x[3] === 'key', done: false }; }).concat(theologyMilestones());
   }
 
   // What is going on right now, from the Current tier of Building & Blessing.
   function nowDraft() {
     return [
       ['church', 'Discerning which church I\u2019m planted in'],
-      ['preaching', 'Seminary: learning, not just grades'],
+      ['theology', 'Seminary: learning, not just grades'],
       ['preaching', 'The podcast'],
       ['ministry', 'The ministry at Cypress'],
       ['ministry', 'Updating the E3 systems for SoCal'],
@@ -412,9 +442,10 @@
   function draft() {
     function g(area, title, start, due) { return { id: uid(), area: area, title: title, start: start, due: due, done: false }; }
     return {
-      v: 10, isDraft: true, marriagePrep: marriagePrepDraft(), churchLook: churchLookDraft(), churchNote: CHURCH_NOTE, marriageNote: MARRIAGE_NOTE, view: 'five', direction: DIRECTION, milestones: milestonesDraft(),
+      v: 11, isDraft: true, trajectory: TRAJECTORY, marriagePrep: marriagePrepDraft(), churchLook: churchLookDraft(), churchNote: CHURCH_NOTE, marriageNote: MARRIAGE_NOTE, view: 'five', direction: DIRECTION, milestones: milestonesDraft(),
       areas: [
         JSON.parse(JSON.stringify(CHURCH)),
+        JSON.parse(JSON.stringify(THEOLOGY)),
         JSON.parse(JSON.stringify(PREACHING)),
         { id: 'ministry', name: 'Disciple-making', years: JSON.parse(JSON.stringify(DISCIPLES)) },
         { id: 'god', name: 'Walk with God', years: {
@@ -430,7 +461,7 @@
           2027: 'One income experiment tested; support raising decided',
           2031: 'Provision that frees my time for disciple-making' } }
       ],
-      goals: churchGoals().concat(preachingGoals(), [
+      goals: churchGoals().concat(theologyGoals(), preachingGoals(), [
         g('ministry', 'Write my disciple-making pathway', '2027-01-04', '2027-03-31'),
         g('ministry', 'Walk 2 men through stage one', '2027-04-01', '2027-06-30'),
         g('ministry', 'Launch a discipleship cycle on campus', '2027-08-01', '2027-09-15'),
@@ -446,7 +477,7 @@
 
   var state;
   try { state = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
-  if (!state || !Array.isArray(state.areas) || (state.isDraft && state.v !== 10)) state = draft();
+  if (!state || !Array.isArray(state.areas) || (state.isDraft && state.v !== 11)) state = draft();
   if (state.isDraft && !state.longDirection) addLong(state);
   // A plan already edited under v1: add preaching ahead of disciple-making, keep everything written.
   if (state.v === 1) {
@@ -539,6 +570,20 @@
     if (ch) Object.keys(OLD_C).forEach(function (y) { if (ch.years[y] === OLD_C[y]) ch.years[y] = NEW_C[y]; });
     if (state.longDirection === "A father in the faith: rooted in one church family, a teaching ministry that makes disciples, generations of leaders sent out, a full house of children who follow Jesus \u2014 and finishing well.") state.longDirection = LONG_DIRECTION;
     state.v = 10;
+  }
+  // v10 -> v11: growing as a sound, God-loving theologian, all the days of my life.
+  if (state.v === 10) {
+    if (!state.areas.some(function (a) { return a.id === 'theology'; })) {
+      var ci = state.areas.findIndex(function (a) { return a.id === 'church'; });
+      state.areas.splice(ci + 1, 0, JSON.parse(JSON.stringify(THEOLOGY)));
+      state.goals = (state.goals || []).concat(theologyGoals());
+      state.milestones = (state.milestones || []).concat(theologyMilestones());
+      (state.now || []).forEach(function (n) { if (/seminary/i.test(n.text) && n.area === 'preaching') n.area = 'theology'; });
+    }
+    if (state.trajectory == null) state.trajectory = TRAJECTORY;
+    if (state.direction === OLD_DIRECTION_10) state.direction = DIRECTION;
+    if (state.longDirection === OLD_LONG_DIRECTION_10) state.longDirection = LONG_DIRECTION;
+    state.v = 11;
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
   }
   state.goals = state.goals || [];
@@ -584,6 +629,7 @@
     h += state.view === 'long' || state.view === 'timeline'
       ? '<div class="direction"><span class="label">Where it is all heading</span>' + ed('longDirection', state.longDirection, 'Over my lifetime, I sense God leading me toward\u2026', 'text') + '</div>'
       : '<div class="direction"><span class="label">The direction</span>' + ed('direction', state.direction, 'Where I sense God leading over these five years', 'text') + '</div>';
+    h += '<div class="trajectory"><span class="label">Lifelong trajectory</span>' + ed('trajectory', state.trajectory, 'Who I am becoming, all the days of my life', 'text') + '</div>';
     h += ({ long: longView, timeline: timelineView, five: fiveYears, year: thisYear }[state.view] || fiveYears)();
     if (state.isDraft) h += '<p class="draft">A starting draft from your Vision. Tap any text to rewrite it. <button data-act="blank">Start blank</button></p>';
     h += '<div class="foot">“The heart of man plans his way, but the LORD establishes his steps.”<span>PROVERBS 16:9</span></div>';
@@ -949,7 +995,7 @@
       }
       case 'blank':
         if (!confirm('Clear the draft and start blank?')) return;
-        state = { v: 10, isDraft: false, churchLook: [], churchNote: '', marriageNote: '', marriagePrep: [], longDirection: '', now: [], milestones: [], born: state.born || null, view: state.view, direction: '', areas: [{ id: uid(), name: '', years: {} }], goals: [] };
+        state = { v: 11, isDraft: false, trajectory: '', churchLook: [], churchNote: '', marriageNote: '', marriagePrep: [], longDirection: '', now: [], milestones: [], born: state.born || null, view: state.view, direction: '', areas: [{ id: uid(), name: '', years: {} }], goals: [] };
         break;
       default: return;
     }
